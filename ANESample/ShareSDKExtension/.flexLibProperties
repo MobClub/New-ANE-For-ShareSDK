@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="cn.sharesdk.ane.Action"/>
+    <classEntry path="cn.sharesdk.ane.NativeMethodName"/>
+    <classEntry path="cn.sharesdk.ane.PlatformID"/>
+    <classEntry path="cn.sharesdk.ane.ResponseState"/>
+    <classEntry path="cn.sharesdk.ane.ShareSDKExtension"/>
+    <classEntry path="cn.sharesdk.ane.ShareType"/>
+    <classEntry path="cn.sharesdk.ane.events.AuthEvent"/>
+    <classEntry path="cn.sharesdk.ane.events.ShareEvent"/>
+    <classEntry path="cn.sharesdk.ane.events.UserInfoEvent"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

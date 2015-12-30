@@ -1,0 +1,36 @@
+<platform xmlns="http://ns.adobe.com/air/extension/17.0">
+    <description >ShareSDK Extension</description>
+    <copyright>ShareSDK 2014 (optional)</copyright>
+    <sdkVersion>7.0</sdkVersion>
+    <linkerOptions>
+        <option>-w</option>
+        <option>-ios_version_min 6.0</option>
+        <option>-licucore</option>
+        <option>-lstdc++</option>
+        <option>-lz</option>
+        <option>-lsqlite3</option>
+        <option>-framework Foundation</option>
+        <option>-framework JavaScriptCore</option>
+        <option>-framework ImageIO</option>
+        <option>-framework AdSupport</option>
+        <option>-framework CoreMotion</option>
+        <option>-framework CoreLocation</option>
+        <option>-framework MediaPlayer</option>
+        <option>-framework AssetsLibrary</option>
+        <option>-framework AddressBook</option>
+    </linkerOptions>
+    
+    <packagedDependencies>
+        <packagedDependency>libraries/MOBFoundation.framework</packagedDependency>
+        <packagedDependency>libraries/ShareSDK.framework</packagedDependency>
+        <packagedDependency>libraries/ShareSDKConnector.framework</packagedDependency>
+        <packagedDependency>libraries/ShareSDKExtension.framework</packagedDependency>
+        <packagedDependency>libraries/ShareSDKUI.framework</packagedDependency>
+        
+        <packagedDependency>libraries/extends/QQSDK/TencentOpenAPI.framework</packagedDependency>
+        <packagedDependency>libraries/extends/GooglePlusSDK/GoogleOpenSource.framework</packagedDependency>
+        <packagedDependency>libraries/extends/GooglePlusSDK/GooglePlus.framework</packagedDependency>
+         <packagedDependency>libraries/extends/RenRenSDK/RennSDK.framework</packagedDependency>
+          <packagedDependency>libraries/extends/KaKaoSDK/KakaoOpenSDK.framework</packagedDependency>
+    </packagedDependencies>
+</platform>

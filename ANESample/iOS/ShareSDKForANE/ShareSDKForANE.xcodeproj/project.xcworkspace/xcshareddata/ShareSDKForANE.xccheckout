@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>56B8955E-ADBD-4725-B501-AE151A006599</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ShareSDKForANE</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>00A4BCAA8934B2643503EECCB592BF0CBB211ADC</key>
+		<string>https://github.com/ShareSDKPlatform/ANESample.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iOS/ShareSDKForANE/ShareSDKForANE.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>00A4BCAA8934B2643503EECCB592BF0CBB211ADC</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ShareSDKPlatform/ANESample.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>00A4BCAA8934B2643503EECCB592BF0CBB211ADC</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>00A4BCAA8934B2643503EECCB592BF0CBB211ADC</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ANESample</string>
+		</dict>
+	</array>
+</dict>
+</plist>
