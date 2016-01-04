@@ -21,11 +21,11 @@ supported original ShareSDK version:
 Open your Adobe Flash project with FlashBuilder,and set the properties（属性).In the window,you should choose "ActionScription building path(ActionScript构建路径)" ->"Native Extention(本机扩展)",and then add the File ShareSDK.ane from  
  ANESample/package.
 
-[!][image](http://wiki.mob.com/wp-content/uploads/2015/12/1.jpg)
+![image](http://wiki.mob.com/wp-content/uploads/2015/12/1.jpg)
 
 And then choose "ActionScription Building(ActionScript构建打包)" -> "Apple iOS" -> "Native Extention(本机扩展)", place a tick in the box.
 
-[!][image](http://wiki.mob.com/wp-content/uploads/2015/12/2.jpg)
+![image](http://wiki.mob.com/wp-content/uploads/2015/12/2.jpg)
 
 #####3.Copy ShareSDK.bundle,ShareSDKUI.bundle and other resource
 
@@ -37,7 +37,7 @@ For example, when you need Sina platform and it's SDK,you should copy libWeiboSD
 #####4.Set the URL Scheme
 For the SSO login or Sharing on Wechat or QQ/QZone, you need to set URL Schemes.Open yourProject-app.xml, find the node <iPhone><InfoAdditions> and set the url scheme.
 
-[!][image](http://wiki.mob.com/wp-content/uploads/2015/12/3.jpg)
+![image](http://wiki.mob.com/wp-content/uploads/2015/12/3.jpg)
 
 
 #### Step 2 : Configuration Setting 
@@ -148,7 +148,7 @@ There is a Xcode project named ShareSDKForANE in the iOS folder in this project.
 
 - 3.Then copy the libraries folder in the xcode project to ANESample/package/iPhone-ARM ,and to ANESample/package/iPhone-ARMiPhone-x86,and delete all the bundle file and .a file in th libraries,incldude the bundle file and .a in the libraries/extends(I believe that you have finished the copy work in "Step 1" - "3.Copy ShareSDK.bundle,ShareSDKUI.bundle and other resource" that copy the bundle and .a you need to the ANE project).
 
-[!][image](http://wiki.mob.com/wp-content/uploads/2015/12/4.jpg)
+![image](http://wiki.mob.com/wp-content/uploads/2015/12/4.jpg)
 
 - 4.Open ANESample/package/platformoptions.xml,you can delete some platform's framework's path you don't need.
 
