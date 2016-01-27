@@ -23,7 +23,7 @@ package cn.sharesdk.ane.events
 		private var _status:int;
 		private var _data:Object;
 		private var _error:Object;
-		private var _reqId:int;
+		private var _reqID:int;
 		
 		/**
 		 * 获取错误信息 
@@ -110,9 +110,9 @@ package cn.sharesdk.ane.events
 		 * @return 流水号
 		 * 
 		 */		
-		public function get reqId():int
+		public function get reqID():int
 		{
-			return _reqId;
+			return _reqID;
 		}
 		
 		/**
@@ -120,9 +120,9 @@ package cn.sharesdk.ane.events
 		 * @param value	流水号
 		 * 
 		 */		
-		public function set reqId(value:int):void
+		public function set reqID(value:int):void
 		{
-			_reqId = value;
+			_reqID = value;
 		}
 	}
 	

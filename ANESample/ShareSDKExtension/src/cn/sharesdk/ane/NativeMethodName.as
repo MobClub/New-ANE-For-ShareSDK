@@ -32,7 +32,7 @@ package cn.sharesdk.ane
 		/**
 		 * 分享内容 
 		 */		
-		public static const SHARE:String = "share";
+		public static const SHARE_CONTENT:String = "shareContent";
 		
 		/**
 		 * 多个平台分享
@@ -68,7 +68,12 @@ package cn.sharesdk.ane
 		 * 获取用户授权信息
 		 */	
 		public static const GET_AUTH_INFO:String = "getAuthInfo";
-
+		
+		/**
+		 * 是否开启SSO授权
+		 */
+		public static const CLOSE_SSO_WHEN_AUTHORIZE:String = "closeSSOWhenAuthorize";
+		
 	}
 	
 }

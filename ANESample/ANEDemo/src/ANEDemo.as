@@ -46,9 +46,9 @@ package
 			WechatSessionConf["app_id"] = "wx4868b35061f87885";
 			WechatSessionConf["app_secret"] = "64020361b8ec4c99936c0e3999a9f249";		
 			
-			TotalConf[PlatformID.WeChatSession] = WechatSessionConf;
-			TotalConf[PlatformID.WeChatTimeline] = WechatSessionConf;
-			TotalConf[PlatformID.WeChatFav] = WechatSessionConf;
+			TotalConf[PlatformID.WeChat] = WechatSessionConf;
+			TotalConf[PlatformID.WeChatMoments] = WechatSessionConf;
+			TotalConf[PlatformID.WeChatFavorites] = WechatSessionConf;
 					
 //			TotalConf[PlatformID.WechatSeries] = WechatSessionConf; 	// iOS中可直接通过本句配置微信系列
 			
@@ -223,49 +223,45 @@ package
 			shareSDK.toast(message);
 		}
 		
-		private function authBtnClickHandler(event:MouseEvent):void
+		private function authBtnClickHandler(event:MouseEvent):int
 		{
-			var reqId:int = 1;//流水号，可随机填
-			shareSDK.Authorize(reqId,PlatformID.SinaWeibo);
+			return shareSDK.authorize(PlatformID.SinaWeibo);
 		}
 		
 		private function cancelAuthBtnClickHandler(event:MouseEvent):void
 		{
-			shareSDK.CancelAuthorize(PlatformID.SinaWeibo);
+			shareSDK.cancelAuthorize(PlatformID.SinaWeibo);
 		}
 		
 		private function hasAuthBtnClickHandler(event:MouseEvent):void
 		{
-			var isValid:Boolean = shareSDK.IsAuthorizedValid(PlatformID.SinaWeibo);
+			var isValid:Boolean = shareSDK.isAuthorizedValid(PlatformID.SinaWeibo);
 			shareSDK.toast("isValid = " + isValid);
 		}
 		
 		private function checkClientBtnClickHandler(event:MouseEvent):void
 		{
-			var isInstalled:Boolean = shareSDK.IsClientValid(PlatformID.WeChatSession);
+			var isInstalled:Boolean = shareSDK.isClientValid(PlatformID.WeChat);
 			
 			shareSDK.toast("isInstalled =" + isInstalled);
 		}
-		private function getUserInfoBtnClickHandler(event:MouseEvent):void
+		private function getUserInfoBtnClickHandler(event:MouseEvent):int
 		{
-			var reqId:int = 2;
-			shareSDK.GetUserInfo(reqId, PlatformID.TencentWeibo);
+			return shareSDK.getUserInfo(PlatformID.TencentWeibo);
 		}
 		
-		private function shareBtnClickHandler(event:MouseEvent):void
+		private function shareBtnClickHandler(event:MouseEvent):int
 		{
-			var reqId:int = 3;
 			var shareParams:Object = new Object();
 			shareParams.text = "这是分享的Text";
 			shareParams.title = "ShareSDK for ANE发布";
 			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";	
 			shareParams.type = ShareType.SSDKContentTypeImage;
-			shareSDK.ShareContent(reqId, PlatformID.SinaWeibo, shareParams);
+			return shareSDK.shareContent(PlatformID.SinaWeibo, shareParams);
 		}
 		
-		private function oneKeyShareBtnClickHandler(event:MouseEvent):void
+		private function oneKeyShareBtnClickHandler(event:MouseEvent):int
 		{
-			var reqId:int = 4;
 			var platforms:Array = new Array(PlatformID.SinaWeibo, PlatformID.TencentWeibo);
 			var shareParams:Object = new Object();
 			shareParams.text = "好耶～好高兴啊～";
@@ -273,20 +269,19 @@ package
 			shareParams.url = "http://mob.com";
 			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";	
 			shareParams.type = ShareType.SSDKContentTypeImage;
-			shareSDK.OneKeyShareContent(reqId, platforms, shareParams);
+			return shareSDK.oneKeyShareContent(platforms, shareParams);
 		}
 		
-		private function shareMenuBtnClickHandler(event:MouseEvent):void
+		private function shareMenuBtnClickHandler(event:MouseEvent):int
 		{
-			var reqId:int = 5;
 			var shareParams:Object = new Object();
 			//自定义菜单数组
-			var shareList:Array = new Array(PlatformID.SinaWeibo,PlatformID.WeChatSession);	
+			var shareList:Array = new Array(PlatformID.SinaWeibo,PlatformID.WeChat);	
 			shareParams.text = "ShareSDK 3.0 for ANE Text";
 			shareParams.title = "ShareSDK 3.0 for ANE Title";
 			shareParams.url = "http://mob.com";
 			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";
-			shareParams.type = ShareType.SSDKContentTypeImage;
+			shareParams.type = ShareType.SSDKContentTypeWebPage;
 			
 			//定制指定平台的分享内容(目前仅对iOS有效)
 			var sinaParams:Object = new Object();
@@ -301,13 +296,12 @@ package
 			sinaParams.type = ShareType.SSDKContentTypeImage;
 			shareParams[PlatformID.SinaWeibo] = sinaParams;
 			
-			shareSDK.ShowShareMenu(reqId, null, shareParams, 320, 460);
+			return shareSDK.showShareMenu(null, shareParams, 320, 460);
 		}
 		
-		private function shareViewBtnClickHandler(event:MouseEvent):void
+		private function shareViewBtnClickHandler(event:MouseEvent):int
 		{
 			var shareParams:Object = new Object();
-			var reqId:int = 6;
 //			var file:File = File.applicationDirectory.resolvePath("mac.jpeg");
 //			shareParams.imageUrl = file.nativePath;
 			shareParams.text = "ShareSDK 3.0 for ANE Text";
@@ -315,26 +309,24 @@ package
 			shareParams.url = "http://mob.com";
 			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";
 			shareParams.type = ShareType.SSDKContentTypeWebPage;
-			shareSDK.ShowShareView(reqId, PlatformID.SinaWeibo, shareParams);
+			return shareSDK.showShareView(PlatformID.SinaWeibo, shareParams);
 		}	
 		
 		private function getCredentialBtnClickHandler(event:MouseEvent):void
 		{
-			var authInfo:Object = shareSDK.GetAuthInfo(PlatformID.SinaWeibo);
+			var authInfo:Object = shareSDK.getAuthInfo(PlatformID.SinaWeibo);
 			var json:String = (authInfo == null ? "" : JSON.stringify(authInfo));
 			shareSDK.toast("authInfo = " + json);
 		}
 		
-		private function addFriendBtnClickHandler(event:MouseEvent):void
+		private function addFriendBtnClickHandler(event:MouseEvent):int
 		{
-			var reqId:int = 7;
-			shareSDK.AddFriend(reqId, PlatformID.TencentWeibo,"ShareSDK");
+			return shareSDK.addFriend(PlatformID.TencentWeibo,"ShareSDK");
 		}
 		
-		private function getFriendListBtnClickHandler(event:MouseEvent):void
+		private function getFriendListBtnClickHandler(event:MouseEvent):int
 		{
-			var reqId:int = 8;
-			shareSDK.GetFriendList(reqId, PlatformID.SinaWeibo,20,1);
+			return shareSDK.getFriendList(PlatformID.SinaWeibo,20,1);
 		}
 		
 	}

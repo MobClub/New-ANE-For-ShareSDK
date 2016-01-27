@@ -21,23 +21,32 @@ package cn.sharesdk.ane {
 		/**
 		 *  网页
 		 */
-		public static const SSDKContentTypeWebPage:int = 3;
-		
-		/**
-		 *  应用
-		 */
-		public static const SSDKContentTypeApp:int = 4;
+		public static const SSDKContentTypeWebPage:int = 4;
 		
 		/**
 		 *  音频
 		 */
-		public static const SSDKContentTypeAudio:int = 5;
+		public static const SSDKContentTypeMusic:int = 5;
 		
 		/**
 		 *  视频
 		 */
 		public static const SSDKContentTypeVideo:int = 6;
-
+		
+		/**
+		 *  应用
+		 */
+		public static const SSDKContentTypeApp:int = 7;
+		
+		/**
+		 *  附件
+		 */
+		public static const SSDKContentTypeFile:int = 8;
+		
+		/**
+		 *  表情
+		 */
+		public static const SSDKContentTypeEmoji:int = 9;
 	}
 	
 }

@@ -15,7 +15,7 @@ package cn.sharesdk.ane
 	
 	public class ShareSDKExtension implements IEventDispatcher 
 	{
-		
+		private var reqID:int;
 		private var context:ExtensionContext;
 		private var onCom:Function;
 		private var onErr:Function;
@@ -24,7 +24,7 @@ package cn.sharesdk.ane
 		public function ShareSDKExtension()
 		{
 			context = ExtensionContext.createExtensionContext("cn.sharesdk.ane.ShareSDKExtension","");
-			context.addEventListener(StatusEvent.STATUS, javaCallback);
+			context.addEventListener(StatusEvent.STATUS, apiCallback);
 			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, invokeHandler);
 		}
 		
@@ -37,11 +37,11 @@ package cn.sharesdk.ane
 				params["source_app"] = event.arguments[1] as String;
 				params["annotation"] = event.arguments[2] as String;
 				
-				callJavaFunction("handleOpenURL", params);
+				apiCaller("handleOpenURL", params);
 			}	
 		}
 		
-		private function callJavaFunction(action:String, params:Object = null):Object 
+		private function apiCaller(action:String, params:Object = null):Object 
 		{
 			var data:Object = new Object();
 			data.action = action;
@@ -51,7 +51,7 @@ package cn.sharesdk.ane
 			return context.call("ShareSDKUtils", json);
 		}
 		
-		private function javaCallback(e:StatusEvent):void 
+		private function apiCallback(e:StatusEvent):void 
 		{
 			if (e.code == "SSDK_PA") 
 			{
@@ -66,7 +66,7 @@ package cn.sharesdk.ane
 				var platform:int = resp.platform;
 				var action:int = resp.action; 		// 
 				var status:int = resp.status; 		// Success = 1, Fail = 2, Cancel = 3
-				var reqId:int = resp.reqId;
+				var reqID:int = resp.reqID;
 				var res:Object = resp.res;
 				
 				var error:Object = null;
@@ -75,14 +75,14 @@ package cn.sharesdk.ane
 				switch (status)
 				{
 					case ResponseState.SUCCESS: 
-						onComplete(reqId, platform, action, res); 
+						onComplete(reqID, platform, action, res); 
 						break;
 					case ResponseState.FAIL:
 						error = res;
-						onError(reqId, platform, action, res); 
+						onError(reqID, platform, action, res); 
 						break;
 					case ResponseState.CANCEL: 
-						onCancel(reqId, platform, action); 
+						onCancel(reqID, platform, action); 
 						break;
 				}
 				
@@ -95,7 +95,7 @@ package cn.sharesdk.ane
 						authEvt.platform = platform;
 						authEvt.status = status;
 						authEvt.error = error;
-						authEvt.reqId = reqId;
+						authEvt.reqID = reqID;
 						this.dispatchEvent(authEvt);
 						
 						break;
@@ -105,7 +105,7 @@ package cn.sharesdk.ane
 						userEvt.platform = platform;
 						userEvt.status = status;
 						userEvt.error = error;
-						userEvt.reqId = reqId;
+						userEvt.reqID = reqID;
 						if (userEvt.status == ResponseState.SUCCESS && res)
 						{
 							userEvt.data = res;
@@ -120,7 +120,7 @@ package cn.sharesdk.ane
 						shareEvt.platform = platform;
 						shareEvt.status = status;
 						shareEvt.error = error;
-						shareEvt.reqId = reqId;
+						shareEvt.reqID = reqID;
 						if (shareEvt.status == ResponseState.SUCCESS && res)
 						{
 							shareEvt.end = res.end;
@@ -137,7 +137,7 @@ package cn.sharesdk.ane
 						addFriendEvt.platform = platform;
 						addFriendEvt.status = status;
 						addFriendEvt.error = error;	
-						addFriendEvt.reqId = reqId;
+						addFriendEvt.reqID = reqID;
 						this.dispatchEvent(addFriendEvt);
 						
 						break;
@@ -148,7 +148,7 @@ package cn.sharesdk.ane
 						getFriendListEvt.platform = platform;
 						getFriendListEvt.status = status;
 						getFriendListEvt.error = error;
-						getFriendListEvt.reqId = reqId;
+						getFriendListEvt.reqID = reqID;
 						if (getFriendListEvt.status == ResponseState.SUCCESS && res)
 						{
 							getFriendListEvt.data = res;
@@ -226,30 +226,31 @@ package cn.sharesdk.ane
 			var params:Object = new Object();
 			params.appkey = appkey;
 			params.config = config;
-			callJavaFunction(NativeMethodName.REGISTER_APP_AND_SET_PLATFORM_CONF, params);		
+			apiCaller(NativeMethodName.REGISTER_APP_AND_SET_PLATFORM_CONF, params);		
 		}
 		
-		public function Authorize(reqId:int, platform:int):void 
+		public function authorize(platform:int):int 
+		{
+			reqID ++;
+			var params:Object = new Object();
+			params.platform = platform;
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.AUTHORIZE, params);
+			return reqID;
+		}
+		
+		public function cancelAuthorize(platform:int):void 
 		{
 			var params:Object = new Object();
 			params.platform = platform;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.AUTHORIZE, params);
-			
+			apiCaller(NativeMethodName.CANCEL_AUTHORIZATION, params);
 		}
 		
-		public function CancelAuthorize(platform:int):void 
+		public function isAuthorizedValid(platform:int):Boolean 
 		{
 			var params:Object = new Object();
 			params.platform = platform;
-			callJavaFunction(NativeMethodName.CANCEL_AUTHORIZATION, params);
-		}
-		
-		public function IsAuthorizedValid(platform:int):Boolean 
-		{
-			var params:Object = new Object();
-			params.platform = platform;
-			var obj:Object = callJavaFunction(NativeMethodName.IS_AUTHORIZED_VALID, params);					
+			var obj:Object = apiCaller(NativeMethodName.IS_AUTHORIZED_VALID, params);					
 			if (obj == null)
 			{
 				return false;
@@ -260,11 +261,11 @@ package cn.sharesdk.ane
 			}
 		}
 		
-		public function IsClientValid(platform:int):Boolean 
+		public function isClientValid(platform:int):Boolean 
 		{
 			var params:Object = new Object();
 			params.platform = platform;
-			var obj:Object = callJavaFunction(NativeMethodName.IS_CLIENT_VALID, params);	
+			var obj:Object = apiCaller(NativeMethodName.IS_CLIENT_VALID, params);	
 			if (obj == null)
 			{
 				return false;
@@ -275,76 +276,90 @@ package cn.sharesdk.ane
 			}
 			
 		}
-		public function GetUserInfo(reqId:int, platform:int):void 
+		public function getUserInfo(platform:int):int 
 		{
+			reqID ++;
 			var params:Object = new Object();
 			params.platform = platform;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.GET_USER_INFO, params);
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.GET_USER_INFO, params);
+			return reqID;
 		}
 		
-		public function ShareContent(reqId:int,platform:int, shareParams:Object):void 
+		public function shareContent(platform:int, shareParams:Object):int 
 		{
+			reqID ++;
 			var params:Object = new Object();
 			params.platform = platform;
 			params.shareParams = shareParams;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.SHARE, params);
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.SHARE_CONTENT, params);
+			return reqID;
 		}
 		
-		public function OneKeyShareContent(reqId:int, platforms:Array, shareParams:Object):void 
+		public function oneKeyShareContent(platforms:Array, shareParams:Object):int 
 		{
+			reqID ++;
 			var params:Object = new Object();
 			params.platforms = platforms;
 			params.shareParams = shareParams;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.MULTI_SHARE, params);
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.MULTI_SHARE, params);
+			return reqID;
 		}
 		
-		public function ShowShareMenu(reqId:int, platforms:Array = null, shareParams:Object = null, x:Number = 0, y:Number = 0):void 
+		public function showShareMenu(platforms:Array = null, shareParams:Object = null, x:Number = 0, y:Number = 0):int
 		{
+			reqID ++;
 			var params:Object = new Object();
 			params.platforms = platforms;
 			params.shareParams = shareParams;
 			params.x = x;
 			params.y = y;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.SHOW_SHARE_MENU, params);
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.SHOW_SHARE_MENU, params);
+			return reqID;
 		}
 		
-		public function ShowShareView(reqId:int, platform:int, shareParams:Object = null):void 
+		public function showShareView(platform:int, shareParams:Object = null):int 
 		{
+			reqID ++;
 			var params:Object = new Object();
 			params.platform = platform;
 			params.shareParams = shareParams;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.SHOW_SHARE_VIEW, params);
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.SHOW_SHARE_VIEW, params);
+			return reqID;
 		}
 		
-		public function AddFriend(reqId:int, platform:int, account:String):void
+		public function addFriend(platform:int, account:String):int
 		{
+			reqID ++;
 			var params:Object = new Object();
 			params.platform = platform;
 			params.account = account;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.ADD_FRIEND, params);
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.ADD_FRIEND, params);
+			return reqID;
 		}
 		
-		public function GetFriendList(reqId:int, platform:int, count:int, page:int):void
+		public function getFriendList(platform:int, count:int, page:int):int
 		{
+			reqID ++;
 			var params:Object = new Object();
 			params.platform = platform;
 			params.count = count;
 			params.page = page;
-			params.reqId = reqId;
-			callJavaFunction(NativeMethodName.GET_FRIEND_LIST, params);
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.GET_FRIEND_LIST, params);
+			return reqID;
 		}
 		
-		public function GetAuthInfo(platform:int):Object
+		public function getAuthInfo(platform:int):Object
 		{
 			var params:Object = new Object();
 			params.platform = platform;
-			var authInfo:Object = callJavaFunction(NativeMethodName.GET_AUTH_INFO, params);	
+			var authInfo:Object = apiCaller(NativeMethodName.GET_AUTH_INFO, params);	
 			
 			if(authInfo == null)
 			{
@@ -360,40 +375,39 @@ package cn.sharesdk.ane
 		{
 			var params:Object = new Object();
 			params.message = message;
-			callJavaFunction("toast", params);
+			apiCaller("toast", params);
 		}
-	
-
-//		public function screenshot():String 
-//		{
-//			var path:Object = callJavaFunction("screenshot");
-//			return path.path;
-//		}
 		
+		public function closeSSOWhenAuthorize(close:Boolean):void 
+		{
+			var params:Object = new Object();
+			params.close = close;
+			apiCaller(NativeMethodName.CLOSE_SSO_WHEN_AUTHORIZE, params);
+		}		
 		
-		public function onComplete(reqId:int, platform:int, action:int, res:Object):void 
+		private function onComplete(reqID:int, platform:int, action:int, res:Object):void 
 		{
 			if (onCom != null) 
 			{
-				onCom(reqId, platform, action, res);
+				onCom(reqID, platform, action, res);
 			}
 		}
 		
-		public function onCancel(reqId:int, platform:int, action:int):void
+		private function onCancel(reqID:int, platform:int, action:int):void
 		{
 			if (onCan != null) 
 			{
-				onCan(reqId, platform, action);
+				onCan(reqID, platform, action);
 			}
 		}
 		
-		public function onError(reqId:int, platform:int, action:int, err:Object):void
+		private function onError(reqID:int, platform:int, action:int, err:Object):void
 		{
 			if (onErr != null) 
 			{
-				onErr(reqId, platform, action, err);
+				onErr(reqID, platform, action, err);
 			}
-		}
+		}		
 		
 	}
 	
