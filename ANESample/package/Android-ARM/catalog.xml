@@ -25,7 +25,7 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/ShareType" mod="1453201062170" signatureChecksum="3623451995" >
+      <script name="cn/sharesdk/ane/ShareType" mod="1453718092725" signatureChecksum="1570151226" >
         <def id="cn.sharesdk.ane:ShareType" /> 
         <dep id="AS3" type="n" /> 
         <dep id="Object" type="i" /> 
@@ -45,7 +45,13 @@
         <dep id="AS3" type="n" /> 
         <dep id="Object" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/ShareSDKExtension" mod="1453712725363" signatureChecksum="1142615451" >
+      <script name="_637e48b23b5adc99ce8cfc4e92c65912ccea4356f9a03353126de70e5ea1b1be_flash_display_Sprite" mod="1453951810311" signatureChecksum="1443855281" >
+        <def id="_637e48b23b5adc99ce8cfc4e92c65912ccea4356f9a03353126de70e5ea1b1be_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/ShareSDKExtension" mod="1453949857731" signatureChecksum="1142615451" >
         <def id="cn.sharesdk.ane:ShareSDKExtension" /> 
         <dep id="JSON" type="e" /> 
         <dep id="cn.sharesdk.ane.events:GetFriendsListEvent" type="e" /> 
@@ -83,19 +89,13 @@
         <dep id="AS3" type="n" /> 
         <dep id="Object" type="i" /> 
       </script>
-      <script name="_7cc90548c7dc7324dd03063e36f5762aaa19d0c960aebaabb56cdcb310d692ae_flash_display_Sprite" mod="1453714541550" signatureChecksum="1421310945" >
-        <def id="_7cc90548c7dc7324dd03063e36f5762aaa19d0c960aebaabb56cdcb310d692ae_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-      </script>
       <script name="cn/sharesdk/ane/events/UserInfoEvent" mod="1453711798003" signatureChecksum="4154232810" >
         <def id="cn.sharesdk.ane.events:UserInfoEvent" /> 
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="82057a401b7656c1d49cf4c6f59950cfcbf8527b4731c70463189cd69c688612"   />
+        <digest type="SHA-256" signed="false" value="2a09d9b4709f18e36c1de95f466c02a915da01c7db494663cdff67b82c10677c"   />
       </digests>
     </library>
   </libraries>

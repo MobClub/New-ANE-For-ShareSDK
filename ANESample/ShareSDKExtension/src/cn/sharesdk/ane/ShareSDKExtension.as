@@ -220,7 +220,7 @@ package cn.sharesdk.ane
 			this.onCan = onCancel;
 		}
 		
-		
+		//设置平台信息
 		public function registerAppAndSetPlatformConfig(appkey:String ,config:Object):void
 		{
 			var params:Object = new Object();
@@ -229,6 +229,7 @@ package cn.sharesdk.ane
 			apiCaller(NativeMethodName.REGISTER_APP_AND_SET_PLATFORM_CONF, params);		
 		}
 		
+		//授权
 		public function authorize(platform:int):int 
 		{
 			reqID ++;
@@ -239,6 +240,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//取消授权
 		public function cancelAuthorize(platform:int):void 
 		{
 			var params:Object = new Object();
@@ -246,6 +248,7 @@ package cn.sharesdk.ane
 			apiCaller(NativeMethodName.CANCEL_AUTHORIZATION, params);
 		}
 		
+		//判断授权是否有效
 		public function isAuthorizedValid(platform:int):Boolean 
 		{
 			var params:Object = new Object();
@@ -261,6 +264,7 @@ package cn.sharesdk.ane
 			}
 		}
 		
+		//判断客户端是否存在
 		public function isClientValid(platform:int):Boolean 
 		{
 			var params:Object = new Object();
@@ -276,6 +280,8 @@ package cn.sharesdk.ane
 			}
 			
 		}
+		
+		//获取用户信息
 		public function getUserInfo(platform:int):int 
 		{
 			reqID ++;
@@ -286,6 +292,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//分享，没有编辑界面
 		public function shareContent(platform:int, shareParams:Object):int 
 		{
 			reqID ++;
@@ -297,6 +304,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//多个平台分享，没有编辑界面；不推荐使用，用户体验不好；建议使用shareContent
 		public function oneKeyShareContent(platforms:Array, shareParams:Object):int 
 		{
 			reqID ++;
@@ -308,6 +316,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//分享，显示九宫格
 		public function showShareMenu(platforms:Array = null, shareParams:Object = null, x:Number = 0, y:Number = 0):int
 		{
 			reqID ++;
@@ -321,6 +330,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//分享，直接进入编辑界面
 		public function showShareView(platform:int, shareParams:Object = null):int 
 		{
 			reqID ++;
@@ -332,6 +342,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//关注好友
 		public function addFriend(platform:int, account:String):int
 		{
 			reqID ++;
@@ -343,6 +354,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//获取好友列表，新浪、腾讯、facebook
 		public function getFriendList(platform:int, count:int, page:int):int
 		{
 			reqID ++;
@@ -355,6 +367,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//获取授权用户信息
 		public function getAuthInfo(platform:int):Object
 		{
 			var params:Object = new Object();
@@ -378,6 +391,7 @@ package cn.sharesdk.ane
 			apiCaller("toast", params);
 		}
 		
+		//关闭SSO授权
 		public function closeSSOWhenAuthorize(close:Boolean):void 
 		{
 			var params:Object = new Object();
@@ -385,6 +399,7 @@ package cn.sharesdk.ane
 			apiCaller(NativeMethodName.CLOSE_SSO_WHEN_AUTHORIZE, params);
 		}		
 		
+		//监听结果：成功
 		private function onComplete(reqID:int, platform:int, action:int, res:Object):void 
 		{
 			if (onCom != null) 
@@ -393,6 +408,7 @@ package cn.sharesdk.ane
 			}
 		}
 		
+		//监听结果：取消
 		private function onCancel(reqID:int, platform:int, action:int):void
 		{
 			if (onCan != null) 
@@ -401,6 +417,7 @@ package cn.sharesdk.ane
 			}
 		}
 		
+		//监听结果：错误
 		private function onError(reqID:int, platform:int, action:int, err:Object):void
 		{
 			if (onErr != null) 
