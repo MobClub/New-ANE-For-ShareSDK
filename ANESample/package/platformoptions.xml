@@ -12,25 +12,17 @@
         <option>-framework Foundation</option>
         <option>-framework JavaScriptCore</option>
         <option>-framework ImageIO</option>
-        <option>-framework AdSupport</option>
-        <option>-framework CoreMotion</option>
-        <option>-framework CoreLocation</option>
-        <option>-framework MediaPlayer</option>
-        <option>-framework AssetsLibrary</option>
-        <option>-framework AddressBook</option>
     </linkerOptions>
     
     <packagedDependencies>
-        <packagedDependency>libraries/MOBFoundation.framework</packagedDependency>
-        <packagedDependency>libraries/ShareSDK.framework</packagedDependency>
-        <packagedDependency>libraries/ShareSDKConnector.framework</packagedDependency>
-        <packagedDependency>libraries/ShareSDKExtension.framework</packagedDependency>
-        <packagedDependency>libraries/ShareSDKUI.framework</packagedDependency>
-        
-        <packagedDependency>libraries/extends/QQSDK/TencentOpenAPI.framework</packagedDependency>
-        <packagedDependency>libraries/extends/GooglePlusSDK/GoogleOpenSource.framework</packagedDependency>
-        <packagedDependency>libraries/extends/GooglePlusSDK/GooglePlus.framework</packagedDependency>
-         <packagedDependency>libraries/extends/RenRenSDK/RennSDK.framework</packagedDependency>
-          <packagedDependency>libraries/extends/KaKaoSDK/KakaoOpenSDK.framework</packagedDependency>
+        <packagedDependency>ShareSDK/ShareSDK.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/Required/MOBFoundation.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/Required/ShareSDKConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/Optional/ShareSDKExtension.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/Optional/ShareSDKUI.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenAPI.framework</packagedDependency>
+         <packagedDependency>ShareSDK/Support/PlatformSDK/FacebookMessengerSDK/FBSDKMessengerShareKit.framework</packagedDependency>
+         <packagedDependency>ShareSDK/Support/PlatformSDK/RenRenSDK/RennSDK.framework</packagedDependency>
+          <packagedDependency>ShareSDK/Support/PlatformSDK/KaKaoSDK/KakaoOpenSDK.framework</packagedDependency>
     </packagedDependencies>
 </platform>

@@ -39,7 +39,7 @@ package cn.sharesdk.ane {
 		public static const WhatsApp:int = 43;			//WhatsApp  
 		public static const KakaoTalk:int = 44;			//KakaoTalk  
 		public static const KakaoStory:int = 45;		//KakaoStory 
-		public static const FacebookMessenger:int = 46;	//FacebookMessenger *（Android only）*
+		public static const FacebookMessenger:int = 46;	//FacebookMessenger
 		public static const Bluetooth:int = 48;			//Bluetooth 
 		public static const AliPaySocial:int = 50;		//AliPay Social 
 		

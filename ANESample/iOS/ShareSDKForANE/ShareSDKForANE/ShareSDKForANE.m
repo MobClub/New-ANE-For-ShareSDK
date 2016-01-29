@@ -25,13 +25,11 @@
 #define __SHARESDK_WECHAT__
 #define __SHARESDK_QQ__
 #define __SHARESDK_APSOCIAL__
-//#define __SHARESDK_RENREN__
-//#define __SHARESDK_YIXIN__
+#define __SHARESDK_RENREN__
+#define __SHARESDK_YIXIN__
+#define __SHARESDK_FACEBOOK_MSG__
 
-//#define __SHARESDK_GOOGLE_PLUS__       //目前发现Google+ SDK 不能顺利在ANE环境下编译
 //#define __SHARESDK_KAKAO__             //目前发现Kakao SDK 不能顺利在ANE环境下编译
-
-
 
 #ifdef __SHARESDK_WECHAT__
 #import "WXApi.h"
@@ -44,10 +42,6 @@
 
 #ifdef __SHARESDK_SINA_WEIBO__
 #import "WeiboSDK.h"
-#endif
-
-#ifdef __SHARESDK_GOOGLE_PLUS__
-#import <GooglePlus/GooglePlus.h>
 #endif
 
 #ifdef __SHARESDK_RENREN__
@@ -66,6 +60,9 @@
 #import "APOpenAPI.h"
 #endif
 
+#ifdef __SHARESDK_FACEBOOK_MSG__
+#import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
+#endif
 
 static UIView *_refView = nil;
 
@@ -143,6 +140,33 @@ NSArray *objectToArray(FREObject obj)
     }
     
     return nil;
+}
+
+SSDKContentType convertContentTypeWith(NSNumber *number)
+{
+    switch ([number integerValue])
+    {
+        case 0:
+            return SSDKContentTypeAuto;
+        case 1:
+            return SSDKContentTypeText;
+        case 2:
+            return SSDKContentTypeImage;
+        case 4:
+            return SSDKContentTypeWebPage;
+        case 5:
+            return SSDKContentTypeAudio;
+        case 6:
+            return SSDKContentTypeVideo;
+        case 7:
+            return SSDKContentTypeApp;
+        case 8:
+            return SSDKContentTypeApp;
+        case 9:
+            return SSDKContentTypeImage;
+        default:
+            return SSDKContentTypeAudio;
+    }
 }
 
 /**
@@ -235,7 +259,7 @@ void setWechatShareParmas(NSDictionary *wechatDic,NSMutableDictionary *params,SS
     }
     if ([[wechatDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
     {
-        type = [[wechatDic objectForKey:@"type"] integerValue];
+        type = convertContentTypeWith([wechatDic objectForKey:@"type"]);
     }
     
     [params SSDKSetupWeChatParamsByText:text
@@ -318,7 +342,7 @@ void setQQShareParmas(NSDictionary *qqDic,NSMutableDictionary *params,SSDKPlatfo
     }
     if ([[qqDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
     {
-        type = [[qqDic objectForKey:@"type"] integerValue];
+        type = convertContentTypeWith([qqDic objectForKey:@"type"]);
     }
     
     [params SSDKSetupQQParamsByText:text
@@ -426,7 +450,7 @@ void setYiXinShareParmas(NSDictionary *yiXinDic,NSMutableDictionary *params,SSDK
     }
     if ([[yiXinDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
     {
-        type = [[yiXinDic objectForKey:@"type"] integerValue];
+        type = convertContentTypeWith([yiXinDic objectForKey:@"type"]);
     }
     
     [params SSDKSetupYiXinParamsByText:text
@@ -494,7 +518,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         }
         if ([[contentDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
         {
-            type = (SSDKContentType)[[contentDict objectForKey:@"type"] integerValue];
+            type = convertContentTypeWith([contentDict objectForKey:@"type"]);
         }
         
     }
@@ -511,7 +535,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //新浪
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeSinaWeibo]])
         {
-            NSDictionary *sinaDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeSinaWeibo]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeSinaWeibo]];
             NSString *text = nil;
             NSString *title = nil;
             SSDKImage *image = nil;
@@ -521,18 +545,18 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSString *objId = nil;
             SSDKContentType type = SSDKContentTypeText;
             
-            if ([[sinaDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [sinaDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[sinaDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [sinaDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[sinaDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
                 
-                NSString *imagePath = [sinaDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
@@ -551,25 +575,25 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
                 
             }
-            if ([[sinaDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [sinaDic objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[sinaDic objectForKey:@"latitude"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"latitude"] isKindOfClass:[NSString class]])
             {
-                latitude = [[sinaDic objectForKey:@"latitude"] doubleValue];
+                latitude = [[customDict objectForKey:@"latitude"] doubleValue];
             }
-            if ([[sinaDic objectForKey:@"longitude"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"longitude"] isKindOfClass:[NSString class]])
             {
-                longitude = [[sinaDic objectForKey:@"longitude"] doubleValue];
+                longitude = [[customDict objectForKey:@"longitude"] doubleValue];
             }
-            if ([[sinaDic objectForKey:@"objectID"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"objectID"] isKindOfClass:[NSString class]])
             {
-                objId = [sinaDic objectForKey:@"objectID"];
+                objId = [customDict objectForKey:@"objectID"];
             }
-            if ([[sinaDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                type = [[sinaDic objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupSinaWeiboShareParamsByText:text
@@ -585,21 +609,21 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //腾讯微博
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTencentWeibo]])
         {
-            NSDictionary *tencentDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTencentWeibo]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTencentWeibo]];
             NSString *text = nil;
             NSMutableArray *images = [NSMutableArray array];
             double latitude;
             double longitude;
             SSDKContentType type = SSDKContentTypeText;
             
-            if ([[tencentDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [tencentDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[tencentDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
                 SSDKImage *tencentImage = nil;
-                NSString *imagePath = [tencentDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
                                         inRange:NSMakeRange(0, 10)
@@ -617,9 +641,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 [images addObject:tencentImage];
                 
             }
-            else if([[tencentDic objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [tencentDic objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 for (NSString *imagePath in imagePaths)
                 {
                     
@@ -643,17 +667,17 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
        
                 }
             }
-            if ([[tencentDic objectForKey:@"latitude"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"latitude"] isKindOfClass:[NSString class]])
             {
-                latitude = [[tencentDic objectForKey:@"latitude"] doubleValue];
+                latitude = [[customDict objectForKey:@"latitude"] doubleValue];
             }
-            if ([[tencentDic objectForKey:@"longitude"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"longitude"] isKindOfClass:[NSString class]])
             {
-                longitude = [[tencentDic objectForKey:@"longitude"] doubleValue];
+                longitude = [[customDict objectForKey:@"longitude"] doubleValue];
             }
-            if ([[tencentDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                type = [[tencentDic objectForKey:@"type"] integerValue];
+               type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupTencentWeiboShareParamsByText:text
@@ -666,20 +690,20 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //豆瓣
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeDouBan]])
         {
-            NSDictionary *doubanDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeDouBan]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeDouBan]];
             NSString *text = nil;
             SSDKImage *image = nil;
             NSString *title = nil;
             NSString *url = nil;
             NSString *urlDesc = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
-            if ([[doubanDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            SSDKContentType type = SSDKContentTypeText;
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [doubanDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[doubanDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [doubanDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
                                         inRange:NSMakeRange(0, 10)
@@ -695,35 +719,40 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[doubanDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                text = [doubanDic objectForKey:@"title"];
+                text = [customDict objectForKey:@"title"];
             }
-            if ([[doubanDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [doubanDic objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[doubanDic objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
             {
-                urlDesc = [doubanDic objectForKey:@"urlDesc"];
+                urlDesc = [customDict objectForKey:@"urlDesc"];
             }
-            if ([[doubanDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[doubanDic objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             [params SSDKSetupDouBanParamsByText:text
                                           image:image
                                           title:title
                                             url:[NSURL URLWithString:url]
                                         urlDesc:urlDesc
-                                           type:contentType];
+                                           type:type];
         }
 
+        //微信系列
+        if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeWechat]])
+        {
+            NSDictionary *wechatDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeWechat]];
+            setWechatShareParmas(wechatDic, params, SSDKPlatformSubTypeWechatSession);
+        }
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformSubTypeWechatSession]])
         {
             NSDictionary *wechatDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformSubTypeWechatSession]];
             setWechatShareParmas(wechatDic, params, SSDKPlatformSubTypeWechatSession);
-            
         }
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformSubTypeWechatTimeline]])
         {
@@ -736,6 +765,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             setWechatShareParmas(wechatDic, params, SSDKPlatformSubTypeWechatFav);
         }
         
+        //QQ系列
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformSubTypeQQFriend]])
         {
             NSDictionary *qqDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformSubTypeQQFriend]];
@@ -750,19 +780,19 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //人人
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeRenren]])
         {
-            NSDictionary *renrenDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeRenren]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeRenren]];
             NSString *text = nil;
             SSDKImage *image = nil;
             NSString *url = nil;
             NSString *albumId = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
-            if ([[renrenDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            SSDKContentType type = SSDKContentTypeText;
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [renrenDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[renrenDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [renrenDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
                                         inRange:NSMakeRange(0, 10)
@@ -778,17 +808,17 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[renrenDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [renrenDic objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[renrenDic objectForKey:@"albumId"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"albumId"] isKindOfClass:[NSString class]])
             {
-                albumId = [renrenDic objectForKey:@"albumId"];
+                albumId = [customDict objectForKey:@"albumId"];
             }
-            if ([[renrenDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[renrenDic objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             [params SSDKSetupRenRenParamsByText:text
                                           image:image
@@ -800,18 +830,18 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //开心
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeKaixin]])
         {
-            NSDictionary *kaixinDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeKaixin]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeKaixin]];
             NSString *text = nil;
             SSDKImage *image = nil;
             SSDKContentType type = SSDKContentTypeText;
             
-            if ([[kaixinDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [kaixinDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[kaixinDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [kaixinDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
                                         inRange:NSMakeRange(0, 10)
@@ -827,9 +857,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[kaixinDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                type = [[kaixinDic objectForKey:@"type"] integerValue];
+               type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             [params SSDKSetupKaiXinParamsByText:text
                                           image:image
@@ -839,18 +869,18 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //Facebook
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFacebook]])
         {
-            NSDictionary *facebookDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFacebook]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFacebook]];
             NSString *facebookText = nil;
             SSDKImage *facebookImage = nil;
             SSDKContentType facebookContentType = SSDKContentTypeText;
             
-            if ([[facebookDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                facebookText = [facebookDic objectForKey:@"text"];
+                facebookText = [customDict objectForKey:@"text"];
             }
-            if ([[facebookDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [facebookDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
                                         inRange:NSMakeRange(0, 10)
@@ -866,9 +896,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                            settings:nil];
                 }
             }
-            if ([[facebookDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                facebookContentType = [[facebookDic objectForKey:@"type"] integerValue];
+                facebookContentType = [[customDict objectForKey:@"type"] integerValue];
             }
             [params SSDKSetupFacebookParamsByText:facebookText
                                             image:facebookImage
@@ -878,20 +908,20 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //Twitter
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTwitter]])
         {
-            NSDictionary *twitterDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTwitter]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTwitter]];
             NSString *text = nil;
             NSMutableArray *images = [NSMutableArray array];
             double latitude;
             double longitude;
             SSDKContentType type = SSDKContentTypeText;
             
-            if ([[twitterDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [twitterDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[twitterDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [twitterDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 SSDKImage *twitterImage = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -909,9 +939,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
                 [images addObject:twitterImage];
             }
-            else if ([[twitterDic objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [twitterDic objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 for (NSString *imagePath in imagePaths)
                 {
                     SSDKImage *twitterImage = nil;
@@ -933,17 +963,17 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
             }
             
-            if ([[twitterDic objectForKey:@"latitude"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"latitude"] isKindOfClass:[NSString class]])
             {
-                latitude = [[twitterDic objectForKey:@"latitude"] doubleValue];
+                latitude = [[customDict objectForKey:@"latitude"] doubleValue];
             }
-            if ([[twitterDic objectForKey:@"longitude"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"longitude"] isKindOfClass:[NSString class]])
             {
-                longitude = [[twitterDic objectForKey:@"longitude"] doubleValue];
+                longitude = [[customDict objectForKey:@"longitude"] doubleValue];
             }
-            if ([[twitterDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                type = [[twitterDic objectForKey:@"type"] integerValue];
+               type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupTwitterParamsByText:text
@@ -961,15 +991,15 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSString *title = nil;
             NSString *notebook = nil;
             NSMutableArray *tags = [NSMutableArray array];
-            NSDictionary *yinXiangDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeYinXiang]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeYinXiang]];
             
-            if ([[yinXiangDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [yinXiangDict objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[yinXiangDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [yinXiangDict objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -987,9 +1017,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
                 [images addObject:image];
             }
-            else if ([[yinXiangDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [yinXiangDict objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 for (NSString *imagePath in imagePaths)
                 {
                     SSDKImage *image = nil;
@@ -1010,22 +1040,22 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     [images addObject:image];
                 }
             }
-            if ([[yinXiangDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [yinXiangDict objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[yinXiangDict objectForKey:@"notebook"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"notebook"] isKindOfClass:[NSString class]])
             {
-                notebook = [yinXiangDict objectForKey:@"notebook"];
+                notebook = [customDict objectForKey:@"notebook"];
             }
-            if ([[yinXiangDict objectForKey:@"tags"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"tags"] isKindOfClass:[NSString class]])
             {
-                NSString *ricipient = [yinXiangDict objectForKey:@"tags"];
+                NSString *ricipient = [customDict objectForKey:@"tags"];
                 [tags addObject:ricipient];
             }
-            else if([[yinXiangDict objectForKey:@"tags"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"tags"] isKindOfClass:[NSArray class]])
             {
-                NSArray *recipientsArr = [yinXiangDict objectForKey:@"tags"];
+                NSArray *recipientsArr = [customDict objectForKey:@"tags"];
                 tags = [recipientsArr mutableCopy];
             }
             
@@ -1037,167 +1067,43 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                      platformType:SSDKPlatformTypeYinXiang];
         }
         
-        //evernote
-        if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeEvernote]])
-        {
-            NSString *text = nil;
-            NSMutableArray *images = [NSMutableArray array];
-            NSString *title = nil;
-            NSString *notebook = nil;
-            NSMutableArray *tags = [NSMutableArray array];
-            NSDictionary *yinXiangDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeEvernote]];
-            
-            if ([[yinXiangDict objectForKey:@"text"] isKindOfClass:[NSString class]])
-            {
-                text = [yinXiangDict objectForKey:@"text"];
-            }
-            if ([[yinXiangDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
-            {
-                NSString *imagePath = [yinXiangDict objectForKey:@"imageUrl"];
-                SSDKImage *image = nil;
-                if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
-                                        options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
-                                     withString:imagePath])
-                {
-                    image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
-                }
-                else
-                {
-                    UIImage *localImage = [UIImage imageWithContentsOfFile:imagePath];
-                    image = [[SSDKImage alloc]initWithImage:localImage
-                                                     format:SSDKImageFormatJpeg
-                                                   settings:nil];
-                }
-                [images addObject:image];
-            }
-            else if ([[yinXiangDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
-            {
-                NSArray *imagePaths = [yinXiangDict objectForKey:@"imageUrl"];
-                for (NSString *imagePath in imagePaths)
-                {
-                    SSDKImage *image = nil;
-                    if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
-                                            options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
-                                         withString:imagePath])
-                    {
-                        image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
-                    }
-                    else
-                    {
-                        UIImage *localImage = [UIImage imageWithContentsOfFile:imagePath];
-                        image = [[SSDKImage alloc]initWithImage:localImage
-                                                         format:SSDKImageFormatJpeg
-                                                       settings:nil];
-                    }
-                    [images addObject:image];
-                }
-            }
-            if ([[yinXiangDict objectForKey:@"title"] isKindOfClass:[NSString class]])
-            {
-                title = [yinXiangDict objectForKey:@"title"];
-            }
-            if ([[yinXiangDict objectForKey:@"notebook"] isKindOfClass:[NSString class]])
-            {
-                notebook = [yinXiangDict objectForKey:@"notebook"];
-            }
-            if ([[yinXiangDict objectForKey:@"tags"] isKindOfClass:[NSString class]])
-            {
-                NSString *ricipient = [yinXiangDict objectForKey:@"tags"];
-                [tags addObject:ricipient];
-            }
-            else if([[yinXiangDict objectForKey:@"tags"] isKindOfClass:[NSArray class]])
-            {
-                NSArray *recipientsArr = [yinXiangDict objectForKey:@"tags"];
-                tags = [recipientsArr mutableCopy];
-            }
-            
-            [params SSDKSetupEvernoteParamsByText:text
-                                           images:images
-                                            title:title
-                                         notebook:notebook
-                                             tags:tags
-                                     platformType:SSDKPlatformTypeEvernote];
-        }
-        
-        
         //Google+
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeGooglePlus]])
         {
-            NSDictionary *googlePlusDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeGooglePlus]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeGooglePlus]];
             NSString *text = nil;
-            SSDKImage *image = nil;
             NSString *url = nil;
-            NSString *urlDesc = nil;
-            NSString *deepLindId = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
+            SSDKContentType type = SSDKContentTypeText;
             
-            if ([[googlePlusDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [googlePlusDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[googlePlusDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [googlePlusDic objectForKey:@"imageUrl"];
-                
-                if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
-                                        options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
-                                     withString:imagePath])
-                {
-                    image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
-                    
-                }
-                else
-                {
-                    UIImage *localImage = [UIImage imageWithContentsOfFile:imagePath];
-                    image = [[SSDKImage alloc]initWithImage:localImage
-                                                     format:SSDKImageFormatJpeg
-                                                   settings:nil];
-                }
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[googlePlusDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                url = [googlePlusDic objectForKey:@"url"];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
-            if ([[googlePlusDic objectForKey:@"title"] isKindOfClass:[NSString class]])
-            {
-                title = [googlePlusDic objectForKey:@"title"];
-            }
-            if ([[googlePlusDic objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
-            {
-                urlDesc = [googlePlusDic objectForKey:@"urlDesc"];
-            }
-            if ([[googlePlusDic objectForKey:@"deepLinkId"] isKindOfClass:[NSString class]])
-            {
-                deepLindId = [googlePlusDic objectForKey:@"deepLinkId"];
-            }
-            if ([[googlePlusDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
-            {
-                contentType = [[googlePlusDic objectForKey:@"type"] integerValue];
-                
-            }
+            
             [params SSDKSetupGooglePlusParamsByText:text
-                                              image:image
                                                 url:[NSURL URLWithString:url]
-                                              title:title
-                                            urlDesc:urlDesc
-                                         deepLinkId:deepLindId
-                                               type:contentType];
-
+                                               type:type];
+            
         }
         
         //instagram
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeInstagram]])
         {
-            NSDictionary *instagramDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeInstagram]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeInstagram]];
             SSDKImage *image = nil;
             CGFloat menuX;
             CGFloat menuY;
-            if ([[instagramDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [instagramDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1215,37 +1121,38 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[instagramDic objectForKey:@"menuX"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"menuX"] isKindOfClass:[NSNumber class]])
             {
-                menuX = [[instagramDic objectForKey:@"menuX"] floatValue];
+                menuX = [[customDict objectForKey:@"menuX"] floatValue];
             }
-            if ([[instagramDic objectForKey:@"menuY"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"menuY"] isKindOfClass:[NSNumber class]])
             {
-                menuY = [[instagramDic objectForKey:@"menuY"] floatValue];
+                menuY = [[customDict objectForKey:@"menuY"] floatValue];
             }
             
-            [params SSDKSetupInstagramByImage:image menuDisplayPoint:CGPointMake(menuX, menuY)];
+            [params SSDKSetupInstagramByImage:image
+                             menuDisplayPoint:CGPointMake(menuX, menuY)];
         }
         
         //LinkedIn
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeLinkedIn]])
         {
-            NSDictionary *linkInDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeLinkedIn]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeLinkedIn]];
             NSString *text = nil;
             SSDKImage *image = nil;
             NSString *url = nil;
             NSString *title = nil;
             NSString *urlDesc = nil;
             NSString *visibility = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
+            SSDKContentType type = SSDKContentTypeText;
             
-            if ([[linkInDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [linkInDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[linkInDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [linkInDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1263,26 +1170,25 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[linkInDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [linkInDic objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[linkInDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [linkInDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[linkInDic objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
             {
-                urlDesc = [linkInDic objectForKey:@"urlDesc"];
+                urlDesc = [customDict objectForKey:@"urlDesc"];
             }
-            if ([[linkInDic objectForKey:@"visibility"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"visibility"] isKindOfClass:[NSString class]])
             {
-                visibility = [linkInDic objectForKey:@"visibility"];
+                visibility = [customDict objectForKey:@"visibility"];
             }
-            if ([[linkInDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[linkInDic objectForKey:@"type"] integerValue];
-                
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             [params SSDKSetupLinkedInParamsByText:text
                                             image:image
@@ -1290,26 +1196,26 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                             title:title
                                           urlDesc:urlDesc
                                        visibility:visibility
-                                             type:contentType];
+                                             type:type];
         }
         
         //Tumblr
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTumblr]])
         {
-            NSDictionary *tumblrDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTumblr]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeTumblr]];
             NSString *text = nil;
             SSDKImage *image = nil;
             NSString *url = nil;
             NSString *title = nil;
             NSString *blogName = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
-            if ([[tumblrDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            SSDKContentType type = SSDKContentTypeText;
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                tumblrDic = [contentDict objectForKey:@"text"];
+                customDict = [contentDict objectForKey:@"text"];
             }
-            if ([[tumblrDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [tumblrDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1327,30 +1233,34 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[tumblrDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [tumblrDic objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[tumblrDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [tumblrDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[tumblrDic objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
             {
-                blogName = [tumblrDic objectForKey:@"urlDesc"];
+                blogName = [customDict objectForKey:@"urlDesc"];
+            }
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            {
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             [params SSDKSetupTumblrParamsByText:text
                                           image:image
                                             url:[NSURL URLWithString:url]
                                           title:title
                                        blogName:blogName
-                                           type:contentType];
+                                           type:type];
         }
         
         //Mail
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeMail]])
         {
-            NSDictionary *mailDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeMail]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeMail]];
             NSString *text = nil;
             NSString *title = nil;
             NSMutableArray *images = [NSMutableArray array];
@@ -1360,17 +1270,17 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSMutableArray *bccRecipients = [NSMutableArray array];
             SSDKContentType type = SSDKContentTypeText;
             
-            if ([[mailDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [mailDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[mailDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [mailDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[mailDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [mailDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 SSDKImage *mailImage = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1390,9 +1300,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
                 
             }
-            else if([[mailDic objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [mailDic objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 
                 for (NSString *imagePath in imagePaths)
                 {
@@ -1415,56 +1325,56 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     }
                 }
             }
-            if ([[mailDic objectForKey:@"attachmentsPaths"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"attachmentsPaths"] isKindOfClass:[NSString class]])
             {
-                NSData *attachmentsData = [NSData dataWithContentsOfFile:[mailDic objectForKey:@"attachmentsPaths"]];
+                NSData *attachmentsData = [NSData dataWithContentsOfFile:[customDict objectForKey:@"attachmentsPaths"]];
                 [attachments addObject:attachmentsData];
             }
-            else if ([[mailDic objectForKey:@"attachmentsPaths"] isKindOfClass:[NSArray class]])
+            else if ([[customDict objectForKey:@"attachmentsPaths"] isKindOfClass:[NSArray class]])
             {
-                NSArray *attachmentsPaths = [mailDic objectForKey:@"attachmentsPaths"];
+                NSArray *attachmentsPaths = [customDict objectForKey:@"attachmentsPaths"];
                 for (NSString *path in attachmentsPaths)
                 {
                     NSData *data = [NSData dataWithContentsOfFile:path];
                     [attachments addObject:data];
                 }
             }
-            if ([[mailDic objectForKey:@"recipients"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"recipients"] isKindOfClass:[NSString class]])
             {
-                NSString *ricipient = [mailDic objectForKey:@"recipients"];
+                NSString *ricipient = [customDict objectForKey:@"recipients"];
                 [recipients addObject:ricipient];
             }
-            else if([[mailDic objectForKey:@"recipients"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"recipients"] isKindOfClass:[NSArray class]])
             {
-                NSArray *recipientsArr = [mailDic objectForKey:@"recipients"];
+                NSArray *recipientsArr = [customDict objectForKey:@"recipients"];
                 recipients = [recipientsArr mutableCopy];
             }
             
-            if ([[mailDic objectForKey:@"ccRecipients"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"ccRecipients"] isKindOfClass:[NSString class]])
             {
-                NSString *ricipient = [mailDic objectForKey:@"ccRecipients"];
+                NSString *ricipient = [customDict objectForKey:@"ccRecipients"];
                 [ccRecipients addObject:ricipient];
             }
-            else if([[mailDic objectForKey:@"ccRecipients"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"ccRecipients"] isKindOfClass:[NSArray class]])
             {
-                NSArray *recipientsArr = [mailDic objectForKey:@"ccRecipients"];
+                NSArray *recipientsArr = [customDict objectForKey:@"ccRecipients"];
                 ccRecipients = [recipientsArr mutableCopy];
             }
             
-            if ([[mailDic objectForKey:@"bccRecipients"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"bccRecipients"] isKindOfClass:[NSString class]])
             {
-                NSString *ricipient = [mailDic objectForKey:@"bccRecipients"];
+                NSString *ricipient = [customDict objectForKey:@"bccRecipients"];
                 [bccRecipients addObject:ricipient];
             }
-            else if([[mailDic objectForKey:@"bccRecipients"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"bccRecipients"] isKindOfClass:[NSArray class]])
             {
-                NSArray *recipientsArr = [mailDic objectForKey:@"bccRecipients"];
+                NSArray *recipientsArr = [customDict objectForKey:@"bccRecipients"];
                 bccRecipients = [recipientsArr mutableCopy];
             }
             
-            if ([[mailDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                type = [[mailDic objectForKey:@"type"] integerValue];
+               type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupMailParamsByText:text
@@ -1480,25 +1390,25 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //sms
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeSMS]])
         {
-            NSDictionary *SMSDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeSMS]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeSMS]];
             NSString *text = nil;
             NSString *title = nil;
             NSMutableArray *images = [NSMutableArray array];
             NSMutableArray *attachments = [NSMutableArray array];
             NSMutableArray *recipients = [NSMutableArray array];
-            SSDKContentType contentType = SSDKContentTypeText;
+            SSDKContentType type = SSDKContentTypeText;
             
-            if ([[SMSDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [SMSDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[SMSDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [SMSDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[SMSDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [SMSDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 SSDKImage *SMSImage = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1516,9 +1426,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
                 [images addObject:SMSImage];
             }
-            else if ([[SMSDic objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [SMSDic objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 
                 for (NSString *imagePath in imagePaths)
                 {
@@ -1540,14 +1450,14 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     [images addObject:SMSImage];
                 }
             }
-            if ([[SMSDic objectForKey:@"attachmentsPaths"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"attachmentsPaths"] isKindOfClass:[NSString class]])
             {
-                NSData *attachmentsData = [NSData dataWithContentsOfFile:[SMSDic objectForKey:@"attachmentsPaths"]];
+                NSData *attachmentsData = [NSData dataWithContentsOfFile:[customDict objectForKey:@"attachmentsPaths"]];
                 [attachments addObject:attachmentsData];
             }
-            else if ([[SMSDic objectForKey:@"attachmentsPaths"] isKindOfClass:[NSArray class]])
+            else if ([[customDict objectForKey:@"attachmentsPaths"] isKindOfClass:[NSArray class]])
             {
-                NSArray *attachmentsPaths = [SMSDic objectForKey:@"attachmentsPaths"];
+                NSArray *attachmentsPaths = [customDict objectForKey:@"attachmentsPaths"];
                 for (NSString *path in attachmentsPaths)
                 {
                     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -1555,19 +1465,19 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
             }
             
-            if ([[SMSDic objectForKey:@"recipients"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"recipients"] isKindOfClass:[NSString class]])
             {
-                NSString *ricipient = [SMSDic objectForKey:@"recipients"];
+                NSString *ricipient = [customDict objectForKey:@"recipients"];
                 [recipients addObject:ricipient];
             }
-            else if([[SMSDic objectForKey:@"recipients"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"recipients"] isKindOfClass:[NSArray class]])
             {
-                NSArray *recipientsArr = [SMSDic objectForKey:@"recipients"];
+                NSArray *recipientsArr = [customDict objectForKey:@"recipients"];
                 recipients = [recipientsArr mutableCopy];
             }
-            if ([[SMSDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[SMSDic objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupSMSParamsByText:text
@@ -1575,24 +1485,24 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                       images:images
                                  attachments:attachments
                                   recipients:recipients
-                                        type:contentType];
+                                        type:type];
         }
         
-        
+        //Copy
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeCopy]])
         {
-            NSDictionary *copyDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeCopy]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeCopy]];
             NSString *text = nil;
             NSMutableArray *images = [NSMutableArray array];
             NSString *url = nil;
             SSDKContentType type = SSDKContentTypeText;
-            if ([[copyDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [copyDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[copyDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [copyDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 SSDKImage *copyImage = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1611,9 +1521,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     [images addObject:copyImage];
                 }
             }
-            else if([[copyDic objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [copyDic objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 
                 for (NSString *imagePath in imagePaths)
                 {
@@ -1637,13 +1547,13 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
             }
 
-            if ([[copyDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [copyDic objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[copyDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                type = [[copyDic objectForKey:@"type"] integerValue];
+               type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             [params SSDKSetupCopyParamsByText:text
                                        images:images
@@ -1661,36 +1571,36 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSInteger folderId;
             BOOL isPrivateFromSource;
             BOOL resolveFinalUrl;
-            NSDictionary *instapaperDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeCopy]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeCopy]];
 
             
-            if ([[instapaperDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [instapaperDict objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[instapaperDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [instapaperDict objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[instapaperDict objectForKey:@"desc"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"desc"] isKindOfClass:[NSString class]])
             {
-                desc = [instapaperDict objectForKey:@"desc"];
+                desc = [customDict objectForKey:@"desc"];
             }
-            if ([[instapaperDict objectForKey:@"content"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"content"] isKindOfClass:[NSString class]])
             {
-                content = [instapaperDict objectForKey:@"content"];
+                content = [customDict objectForKey:@"content"];
             }
-            if ([[instapaperDict objectForKey:@"folderId"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"folderId"] isKindOfClass:[NSNumber class]])
             {
-                folderId = [[instapaperDict objectForKey:@"folderId"] integerValue];
+                folderId = [[customDict objectForKey:@"folderId"] integerValue];
             }
-            if ([[instapaperDict objectForKey:@"isPrivateFromSource"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"isPrivateFromSource"] isKindOfClass:[NSNumber class]])
             {
-                isPrivateFromSource = [[instapaperDict objectForKey:@"isPrivateFromSource"] boolValue];
+                isPrivateFromSource = [[customDict objectForKey:@"isPrivateFromSource"] boolValue];
             }
-            if ([[instapaperDict objectForKey:@"resolveFinalUrl"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"resolveFinalUrl"] isKindOfClass:[NSNumber class]])
             {
-                resolveFinalUrl = [[instapaperDict objectForKey:@"resolveFinalUrl"] boolValue];
+                resolveFinalUrl = [[customDict objectForKey:@"resolveFinalUrl"] boolValue];
             }
             
             [params SSDKSetupInstapaperParamsByUrl:[NSURL URLWithString:url]
@@ -1706,34 +1616,34 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //pocket
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypePocket]])
         {
-            NSDictionary *pocketDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypePocket]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypePocket]];
             NSString *url = nil;
             NSString *title = nil;
             NSMutableArray *tags = [NSMutableArray array];
             NSString *tweetId = nil;
             
-            if ([[pocketDic objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [pocketDic objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[pocketDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [pocketDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[pocketDic objectForKey:@"tags"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"tags"] isKindOfClass:[NSString class]])
             {
-                if ([pocketDic objectForKey:@"tags"] != nil)
+                if ([customDict objectForKey:@"tags"] != nil)
                 {
-                    [tags addObject:[pocketDic objectForKey:@"tags"]];
+                    [tags addObject:[customDict objectForKey:@"tags"]];
                 }
             }
-            else if ([[pocketDic objectForKey:@"tags"] isKindOfClass:[NSArray class]])
+            else if ([[customDict objectForKey:@"tags"] isKindOfClass:[NSArray class]])
             {
-                tags = [[pocketDic objectForKey:@"tags"] mutableCopy];
+                tags = [[customDict objectForKey:@"tags"] mutableCopy];
             }
-            if ([[pocketDic objectForKey:@"tweetId"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"tweetId"] isKindOfClass:[NSString class]])
             {
-                tweetId = [pocketDic objectForKey:@"tweetId"];
+                tweetId = [customDict objectForKey:@"tweetId"];
             }
             [params SSDKSetupPocketParamsByUrl:[NSURL URLWithString:url]
                                          title:title
@@ -1744,20 +1654,20 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         //youdao
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeYouDaoNote]])
         {
-            NSDictionary *youDaoDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeYouDaoNote]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeYouDaoNote]];
             NSString *text = nil;
             NSMutableArray *images = [NSMutableArray array];
             NSString *title = nil;
             NSString *source = nil;
             NSString *author = nil;
             NSString *notebook = nil;
-            if ([[youDaoDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [youDaoDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[youDaoDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [youDaoDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1777,9 +1687,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
                 
             }
-            else if([[youDaoDic objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [youDaoDic objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 
                 for (NSString *imagePath in imagePaths)
                 {
@@ -1802,21 +1712,21 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     }
                 }
             }
-            if ([[youDaoDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [youDaoDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[youDaoDic objectForKey:@"source"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"source"] isKindOfClass:[NSString class]])
             {
-                source  = [youDaoDic objectForKey:@"source"];
+                source  = [customDict objectForKey:@"source"];
             }
-            if ([[youDaoDic objectForKey:@"author"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"author"] isKindOfClass:[NSString class]])
             {
-                author = [youDaoDic objectForKey:@"author"];
+                author = [customDict objectForKey:@"author"];
             }
-            if ([[youDaoDic objectForKey:@"notebook"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"notebook"] isKindOfClass:[NSString class]])
             {
-                notebook = [youDaoDic objectForKey:@"notebook"];
+                notebook = [customDict objectForKey:@"notebook"];
             }
             [params SSDKSetupYouDaoNoteParamsByText:text
                                              images:images
@@ -1834,23 +1744,23 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSString *boardId = nil;
             SSDKImage *image = nil;
             
-            NSDictionary *pinterestDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypePinterest]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypePinterest]];
             
-            if ([[pinterestDict objectForKey:@"decs"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"decs"] isKindOfClass:[NSString class]])
             {
-                decs = [pinterestDict objectForKey:@"decs"];
+                decs = [customDict objectForKey:@"decs"];
             }
-            if ([[pinterestDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [pinterestDict objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[pinterestDict objectForKey:@"boardId"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"boardId"] isKindOfClass:[NSString class]])
             {
-                boardId = [pinterestDict objectForKey:@"boardId"];
+                boardId = [customDict objectForKey:@"boardId"];
             }
-            if ([[pinterestDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [pinterestDict objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1886,17 +1796,17 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             BOOL isFamily;
             NSInteger safetyLevel;
             NSInteger hidden;
-            SSDKContentType contentType = SSDKContentTypeText;
+            NSInteger contentType;
             
-            NSDictionary *flickrDic = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFlickr]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFlickr]];
             
-            if ([[flickrDic objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [flickrDic objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[flickrDic objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [flickrDic objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -1914,37 +1824,37 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[flickrDic objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [flickrDic objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[flickrDic objectForKey:@"tags"] isKindOfClass:[NSArray class]])
+            if ([[customDict objectForKey:@"tags"] isKindOfClass:[NSArray class]])
             {
-                tags = [[flickrDic objectForKey:@"tages"] copy];
+                tags = [[customDict objectForKey:@"tages"] copy];
             }
-            if ([[flickrDic objectForKey:@"isPublic"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"isPublic"] isKindOfClass:[NSNumber class]])
             {
-                isPublic = [[flickrDic objectForKey:@"isPublic"] boolValue];
+                isPublic = [[customDict objectForKey:@"isPublic"] boolValue];
             }
-            if ([[flickrDic objectForKey:@"isFriend"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"isFriend"] isKindOfClass:[NSNumber class]])
             {
-                isFriend = [[flickrDic objectForKey:@"isFriend"] boolValue];
+                isFriend = [[customDict objectForKey:@"isFriend"] boolValue];
             }
-            if ([[flickrDic objectForKey:@"isFamily"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"isFamily"] isKindOfClass:[NSNumber class]])
             {
-                isFamily = [[flickrDic objectForKey:@"isFamily"] boolValue];
+                isFamily = [[customDict objectForKey:@"isFamily"] boolValue];
             }
-            if ([[flickrDic objectForKey:@"safetyLevel"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"safetyLevel"] isKindOfClass:[NSNumber class]])
             {
-                safetyLevel = [[flickrDic objectForKey:@"safetyLevel"] integerValue];
+                safetyLevel = [[customDict objectForKey:@"safetyLevel"] integerValue];
             }
-            if ([[flickrDic objectForKey:@"hidden"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"hidden"] isKindOfClass:[NSNumber class]])
             {
-                hidden = [[flickrDic objectForKey:@"hidden"] integerValue];
+                hidden = [[customDict objectForKey:@"hidden"] integerValue];
             }
-            if ([[flickrDic objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"contentType"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[flickrDic objectForKey:@"type"] integerValue];
+                contentType = [[customDict objectForKey:@"contentType"] integerValue];
             }
             [params SSDKSetupFlickrParamsByText:text
                                           image:image
@@ -1971,6 +1881,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             [params SSDKSetupDropboxParamsByAttachment:attachmentPath];
         }
 
+        //VKontakte
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeVKontakte]])
         {
        
@@ -1981,22 +1892,22 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
            BOOL friendsOnly;
            double latitude;
            double longitude;
-           SSDKContentType contentType = SSDKContentTypeText;
-           NSDictionary *vkDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeVKontakte]];
+           SSDKContentType type = SSDKContentTypeText;
+           NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeVKontakte]];
            
            
-           if ([[vkDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+           if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
            {
-               text = [vkDict objectForKey:@"text"];
+               text = [customDict objectForKey:@"text"];
            }
-           if ([[vkDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+           if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
            {
-               url = [vkDict objectForKey:@"url"];
+               url = [customDict objectForKey:@"url"];
            }
            
-           if ([[vkDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+           if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
            {
-               NSString *imagePath = [vkDict objectForKey:@"imageUrl"];
+               NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                SSDKImage *image = nil;
                if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                        options:MOBFRegexOptionsNoOptions
@@ -2016,9 +1927,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                }
                
            }
-           else if([[vkDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+           else if([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
            {
-               NSArray *imagePaths = [vkDict objectForKey:@"imageUrl"];
+               NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                
                for (NSString *imagePath in imagePaths)
                {
@@ -2041,26 +1952,27 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                    }
                }
            }
-           if ([[vkDict objectForKey:@"groupId"] isKindOfClass:[NSString class]])
+           if ([[customDict objectForKey:@"groupId"] isKindOfClass:[NSString class]])
            {
-               groupId = [vkDict objectForKey:@"groupId"];
+               groupId = [customDict objectForKey:@"groupId"];
            }
-           if ([[vkDict objectForKey:@"friendsOnly"] isKindOfClass:[NSNumber class]])
+           if ([[customDict objectForKey:@"friendsOnly"] isKindOfClass:[NSNumber class]])
            {
-               friendsOnly = [[vkDict objectForKey:@"friendsOnly"] boolValue];
+               friendsOnly = [[customDict objectForKey:@"friendsOnly"] boolValue];
            }
-           if ([[vkDict objectForKey:@"latitude"] isKindOfClass:[NSString class]])
+           if ([[customDict objectForKey:@"latitude"] isKindOfClass:[NSString class]])
            {
-               latitude = [[vkDict objectForKey:@"latitude"] doubleValue];
+               latitude = [[customDict objectForKey:@"latitude"] doubleValue];
            }
-           if ([[vkDict objectForKey:@"longitude"] isKindOfClass:[NSString class]])
+           if ([[customDict objectForKey:@"longitude"] isKindOfClass:[NSString class]])
            {
-               longitude = [[vkDict objectForKey:@"longitude"] doubleValue];
+               longitude = [[customDict objectForKey:@"longitude"] doubleValue];
            }
-           if ([[vkDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+           if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
            {
-               contentType = [[vkDict objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
            }
+
            
            [params SSDKSetupVKontakteParamsByText:text
                                            images:images
@@ -2069,7 +1981,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                       friendsOnly:friendsOnly
                                          latitude:latitude
                                         longitude:longitude
-                                             type:contentType];
+                                             type:type];
         }
         
         //易信系列
@@ -2105,26 +2017,26 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             SSDKImage *image = nil;
             NSString *url = nil;
             NSString *title = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
+            SSDKContentType type = SSDKContentTypeText;
             
-            NSDictionary *mingDaoDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeMingDao]];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeMingDao]];
             
             
-            if ([[mingDaoDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [mingDaoDict objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[mingDaoDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [mingDaoDict objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[mingDaoDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [mingDaoDict objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[mingDaoDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [mingDaoDict objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -2142,16 +2054,16 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[mingDaoDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[mingDaoDict objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupMingDaoParamsByText:text
                                            image:image
                                              url:[NSURL URLWithString:url]
                                            title:title
-                                            type:contentType];
+                                            type:type];
             
         }
         
@@ -2160,16 +2072,16 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         {
             NSString *text = nil;
             SSDKImage *image = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
-            NSDictionary *lineDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeLine]];
+            SSDKContentType type = SSDKContentTypeText;
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeLine]];
             
-            if ([[lineDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [lineDict objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[lineDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [lineDict objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -2187,14 +2099,14 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[lineDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[lineDict objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupLineParamsByText:text
                                         image:image
-                                         type:contentType];
+                                         type:type];
             
         }
         
@@ -2208,27 +2120,27 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSString *videoPath = nil;
             CGFloat menuX;
             CGFloat menuY;
-            SSDKContentType contentType = SSDKContentTypeText;
-            NSDictionary *whatAppDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeWhatsApp]];
+            SSDKContentType type = SSDKContentTypeText;
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeWhatsApp]];
 
             
-            if ([[whatAppDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [whatAppDict objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[whatAppDict objectForKey:@"audioPath"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"audioPath"] isKindOfClass:[NSString class]])
             {
-                audioPath = [whatAppDict objectForKey:@"audioPath"];
-            }
-
-            if ([[whatAppDict objectForKey:@"videoPath"] isKindOfClass:[NSString class]])
-            {
-                videoPath = [whatAppDict objectForKey:@"videoPath"];
+                audioPath = [customDict objectForKey:@"audioPath"];
             }
 
-            if ([[whatAppDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"videoPath"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [whatAppDict objectForKey:@"imageUrl"];
+                videoPath = [customDict objectForKey:@"videoPath"];
+            }
+
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            {
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -2246,13 +2158,17 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                    settings:nil];
                 }
             }
-            if ([[whatAppDict objectForKey:@"menuX"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"menuX"] isKindOfClass:[NSNumber class]])
             {
-                menuX = [[whatAppDict objectForKey:@"menuX"] floatValue];
+                menuX = [[customDict objectForKey:@"menuX"] floatValue];
             }
-            if ([[whatAppDict objectForKey:@"menuY"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"menuY"] isKindOfClass:[NSNumber class]])
             {
-                menuY = [[whatAppDict objectForKey:@"menuY"] floatValue];
+                menuY = [[customDict objectForKey:@"menuY"] floatValue];
+            }
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            {
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
             
             [params SSDKSetupWhatsAppParamsByText:text
@@ -2260,9 +2176,105 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                             audio:audioPath
                                             video:videoPath
                                  menuDisplayPoint:CGPointMake(menuX, menuY)
-                                             type:contentType];
+                                             type:type];
         }
         
+        //FacebookMessenger
+        if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFacebookMessenger]])
+        {
+            NSString *imagePath = nil;
+            NSString *gifPath = nil;
+            NSString *audioPath = nil;
+            NSString *videoPath = nil;
+            SSDKContentType type = SSDKContentTypeText;
+            
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFacebookMessenger]];
+
+            
+            if ([[customDict objectForKey:@"imagePath"] isKindOfClass:[NSString class]])
+            {
+                imagePath = [customDict objectForKey:@"imagePath"];
+            }
+            if ([[customDict objectForKey:@"gifPath"] isKindOfClass:[NSString class]])
+            {
+                gifPath = [customDict objectForKey:@"gifPath"];
+            }
+            if ([[customDict objectForKey:@"audioPath"] isKindOfClass:[NSString class]])
+            {
+                audioPath = [customDict objectForKey:@"audioPath"];
+            }
+            if ([[customDict objectForKey:@"videoPath"] isKindOfClass:[NSString class]])
+            {
+                videoPath = [customDict objectForKey:@"videoPath"];
+            }
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            {
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
+            }
+
+            [params SSDKSetupFacebookMessengerParamsByImage:imagePath
+                                                        gif:gifPath
+                                                      audio:audioPath
+                                                      video:videoPath
+                                                       type:type];
+        }
+
+        //支付宝好友
+        if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocial]])
+        {
+            NSString *text = nil;
+            SSDKImage *image = nil;
+            NSString *title = nil;
+            NSString *url = nil;
+            SSDKContentType type = SSDKContentTypeText;
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocial]];
+
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            {
+                text = [customDict objectForKey:@"text"];
+            }
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            {
+                title = [customDict objectForKey:@"title"];
+            }
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            {
+                url = [customDict objectForKey:@"url"];
+            }
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            {
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
+                
+                if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
+                                        options:MOBFRegexOptionsNoOptions
+                                        inRange:NSMakeRange(0, 10)
+                                     withString:imagePath])
+                {
+                    image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
+                    
+                }
+                else
+                {
+                    UIImage *localImage = [UIImage imageWithContentsOfFile:imagePath];
+                    image = [[SSDKImage alloc]initWithImage:localImage
+                                                     format:SSDKImageFormatJpeg
+                                                   settings:nil];
+                }
+            }
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            {
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
+            }
+
+            [params SSDKSetupAliPaySocialParamsByText:text
+                                                image:image
+                                                title:title
+                                                  url:[NSURL URLWithString:url]
+                                                 type:type];
+            
+        }
+        
+        //kakao系列
         if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeKakao]])
         {
             NSString *text = nil;
@@ -2284,18 +2296,18 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSDictionary *iphoneExecParams = nil;
             NSDictionary *ipadExecParams = nil;
             
-            SSDKContentType contentType = SSDKContentTypeText;
+            SSDKContentType type = SSDKContentTypeText;
             SSDKPlatformType subType = SSDKPlatformSubTypeKakaoTalk;
             
-            NSDictionary *kakaoDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeKakao]];
-
-            if ([[kakaoDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeKakao]];
+            
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [kakaoDict objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[kakaoDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                NSString *imagePath = [kakaoDict objectForKey:@"imageUrl"];
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
@@ -2315,9 +2327,9 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 }
                 
             }
-            else if([[kakaoDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
+            else if([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                NSArray *imagePaths = [kakaoDict objectForKey:@"imageUrl"];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
                 for (NSString *imagePath in imagePaths)
                 {
                     SSDKImage *image = nil;
@@ -2339,76 +2351,76 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     }
                 }
             }
-            if ([[kakaoDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
             {
-                title = [kakaoDict objectForKey:@"title"];
+                title = [customDict objectForKey:@"title"];
             }
-            if ([[kakaoDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
             {
-                url = [kakaoDict objectForKey:@"url"];
+                url = [customDict objectForKey:@"url"];
             }
-            if ([[kakaoDict objectForKey:@"permission"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"permission"] isKindOfClass:[NSString class]])
             {
-                permission = [kakaoDict objectForKey:@"permission"];
+                permission = [customDict objectForKey:@"permission"];
             }
-            if ([[kakaoDict objectForKey:@"enableShare"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"enableShare"] isKindOfClass:[NSNumber class]])
             {
-                enableShare = [[kakaoDict objectForKey:@"enableShare"] boolValue];
+                enableShare = [[customDict objectForKey:@"enableShare"] boolValue];
             }
-            if ([[kakaoDict objectForKey:@"imageWidth"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"imageWidth"] isKindOfClass:[NSNumber class]])
             {
-                imageWidth = [[kakaoDict objectForKey:@"imageWidth"] floatValue];
+                imageWidth = [[customDict objectForKey:@"imageWidth"] floatValue];
             }
-            if ([[kakaoDict objectForKey:@"imageHeight"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"imageHeight"] isKindOfClass:[NSNumber class]])
             {
-                imageHeight = [[kakaoDict objectForKey:@"imageHeight"] floatValue];
+                imageHeight = [[customDict objectForKey:@"imageHeight"] floatValue];
             }
             if (imageHeight >= 0 && imageWidth >= 0)
             {
                 defaultSize = CGSizeMake(imageWidth, imageHeight);
             }
-            if ([[kakaoDict objectForKey:@"appButtonTitle"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"appButtonTitle"] isKindOfClass:[NSString class]])
             {
-                appButtonTitle = [kakaoDict objectForKey:@"appButtonTitle"];
+                appButtonTitle = [customDict objectForKey:@"appButtonTitle"];
             }
-            if ([[kakaoDict objectForKey:@"androidMarkParam"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"androidMarkParam"] isKindOfClass:[NSString class]])
             {
-                androidMarkParam = [kakaoDict objectForKey:@"androidMarkParam"];
+                androidMarkParam = [customDict objectForKey:@"androidMarkParam"];
             }
-            if ([[kakaoDict objectForKey:@"iphoneMarkParam"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"iphoneMarkParam"] isKindOfClass:[NSString class]])
             {
-                iphoneMarkParam = [kakaoDict objectForKey:@"iphoneMarkParam"];
+                iphoneMarkParam = [customDict objectForKey:@"iphoneMarkParam"];
             }
-            if ([[kakaoDict objectForKey:@"ipadMarkParam"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"ipadMarkParam"] isKindOfClass:[NSString class]])
             {
-                ipadMarkParam = [kakaoDict objectForKey:@"ipadMarkParam"];
+                ipadMarkParam = [customDict objectForKey:@"ipadMarkParam"];
             }
-            if ([[kakaoDict objectForKey:@"androidExecParam"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"androidExecParam"] isKindOfClass:[NSString class]])
             {
-                NSString* execStr = [kakaoDict objectForKey:@"androidExecParam"];
+                NSString* execStr = [customDict objectForKey:@"androidExecParam"];
                 androidExecParam = @{@"androidExecParam" : execStr};
             }
-            if ([[kakaoDict objectForKey:@"ipadExecParams"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"ipadExecParams"] isKindOfClass:[NSString class]])
             {
                 
-                NSString* execStr = [kakaoDict objectForKey:@"ipadExecParams"];
+                NSString* execStr = [customDict objectForKey:@"ipadExecParams"];
                 ipadExecParams = @{@"ipadExecParams" : execStr};
                 
             }
-            if ([[kakaoDict objectForKey:@"iphoneExecParams"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"iphoneExecParams"] isKindOfClass:[NSString class]])
             {
-                NSString* execStr = [kakaoDict objectForKey:@"iphoneExecParams"];
+                NSString* execStr = [customDict objectForKey:@"iphoneExecParams"];
                 iphoneExecParams = @{@"iphoneExecParams" : execStr};
             }
-            if ([[kakaoDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
             {
-                contentType = [[kakaoDict objectForKey:@"type"] integerValue];
+                type = convertContentTypeWith([customDict objectForKey:@"type"]);
             }
-            if ([[kakaoDict objectForKey:@"subType"] isKindOfClass:[NSNumber class]])
+            if ([[customDict objectForKey:@"subType"] isKindOfClass:[NSNumber class]])
             {
-                subType = [[kakaoDict objectForKey:@"subType"] integerValue];
+                subType = [[customDict objectForKey:@"subType"] integerValue];
             }
-
+            
             [params SSDKSetupKaKaoParamsByText:text
                                         images:images
                                          title:title
@@ -2423,44 +2435,35 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                iphoneMarkParam:iphoneMarkParam
                                 ipadExecParams:ipadExecParams
                                  ipadMarkParam:ipadMarkParam
-                                          type:contentType
+                                          type:type
                             forPlatformSubType:subType];
             
         }
-        
-        //支付宝好友
-        if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocial]])
+
+        //evernote
+        if ([contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeEvernote]])
         {
             NSString *text = nil;
-            SSDKImage *image = nil;
+            NSMutableArray *images = [NSMutableArray array];
             NSString *title = nil;
-            NSString *url = nil;
-            SSDKContentType contentType = SSDKContentTypeText;
-            NSDictionary *aliPayDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocial]];
-
-            if ([[aliPayDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            NSString *notebook = nil;
+            NSMutableArray *tags = [NSMutableArray array];
+            NSDictionary *customDict = [contentDict objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeEvernote]];
+            
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
             {
-                text = [aliPayDict objectForKey:@"text"];
+                text = [customDict objectForKey:@"text"];
             }
-            if ([[aliPayDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
-                title = [aliPayDict objectForKey:@"title"];
-            }
-            if ([[aliPayDict objectForKey:@"url"] isKindOfClass:[NSString class]])
-            {
-                url = [aliPayDict objectForKey:@"url"];
-            }
-            if ([[aliPayDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
-            {
-                NSString *imagePath = [aliPayDict objectForKey:@"imageUrl"];
-                
+                NSString *imagePath = [customDict objectForKey:@"imageUrl"];
+                SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
                                         inRange:NSMakeRange(0, 10)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
-                    
                 }
                 else
                 {
@@ -2469,29 +2472,63 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                                                      format:SSDKImageFormatJpeg
                                                    settings:nil];
                 }
+                [images addObject:image];
             }
-            if ([[aliPayDict objectForKey:@"type"] isKindOfClass:[NSNumber class]])
+            else if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
             {
-                contentType = [[aliPayDict objectForKey:@"type"] integerValue];
+                NSArray *imagePaths = [customDict objectForKey:@"imageUrl"];
+                for (NSString *imagePath in imagePaths)
+                {
+                    SSDKImage *image = nil;
+                    if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
+                                            options:MOBFRegexOptionsNoOptions
+                                            inRange:NSMakeRange(0, 10)
+                                         withString:imagePath])
+                    {
+                        image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
+                    }
+                    else
+                    {
+                        UIImage *localImage = [UIImage imageWithContentsOfFile:imagePath];
+                        image = [[SSDKImage alloc]initWithImage:localImage
+                                                         format:SSDKImageFormatJpeg
+                                                       settings:nil];
+                    }
+                    [images addObject:image];
+                }
             }
-
-            [params SSDKSetupAliPaySocialParamsByText:text
-                                                image:image
-                                                title:title
-                                                  url:[NSURL URLWithString:url]
-                                                 type:contentType];
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            {
+                title = [customDict objectForKey:@"title"];
+            }
+            if ([[customDict objectForKey:@"notebook"] isKindOfClass:[NSString class]])
+            {
+                notebook = [customDict objectForKey:@"notebook"];
+            }
+            if ([[customDict objectForKey:@"tags"] isKindOfClass:[NSString class]])
+            {
+                NSString *ricipient = [customDict objectForKey:@"tags"];
+                [tags addObject:ricipient];
+            }
+            else if([[customDict objectForKey:@"tags"] isKindOfClass:[NSArray class]])
+            {
+                NSArray *recipientsArr = [customDict objectForKey:@"tags"];
+                tags = [recipientsArr mutableCopy];
+            }
             
+            [params SSDKSetupEvernoteParamsByText:text
+                                           images:images
+                                            title:title
+                                         notebook:notebook
+                                             tags:tags
+                                     platformType:SSDKPlatformTypeEvernote];
         }
-
-        
         
         
     }
     
     return params;
 }
-
-
 
 void ShareSDKRegisterAppAndSetPlatformConfig (NSDictionary *params)
 {
@@ -2539,12 +2576,6 @@ void ShareSDKRegisterAppAndSetPlatformConfig (NSDictionary *params)
                              [ShareSDKConnector connectRenren:[RennClient class]];
 #endif
                              break;
-                         case SSDKPlatformTypeGooglePlus:
-#ifdef __SHARESDK_GOOGLE_PLUS__
-                             [ShareSDKConnector connectGooglePlus:[GPPSignIn class]
-                                                       shareClass:[GPPShare class]];
-#endif
-                             break;
                          case SSDKPlatformTypeKakao:
 #ifdef __SHARESDK_KAKAO__
                              [ShareSDKConnector connectKaKao:[KOSession class]];
@@ -2563,7 +2594,11 @@ void ShareSDKRegisterAppAndSetPlatformConfig (NSDictionary *params)
                              [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
 #endif
                              break;
-                        //待续..
+                        case  SSDKPlatformTypeFacebookMessenger:
+#ifdef __SHARESDK_FACEBOOK_MSG__
+                             [ShareSDKConnector connectFacebookMessenger:[FBSDKMessengerSharer class]];
+#endif
+                             break;
                          default:
                              break;
                      }
@@ -2623,14 +2658,14 @@ void ShareSDKRegisterAppAndSetPlatformConfig (NSDictionary *params)
 
                 [KakaoTypes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                    
-                    NSDictionary *KakaoDict = [platformConfig objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)obj]];
+                    NSDictionary *customDict = [platformConfig objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)obj]];
                     
-                    if (KakaoDict && [[KakaoDict allKeys] count] > 0)
+                    if (customDict && [[customDict allKeys] count] > 0)
                     {
-                        [appInfo SSDKSetupKaKaoByAppKey:[KakaoDict objectForKey:@"app_key"]
-                                             restApiKey:[KakaoDict objectForKey:@"rest_api_key"]
-                                            redirectUri:[KakaoDict objectForKey:@"redirect_uri"]
-                                               authType:[KakaoDict objectForKey:@"auth_type"]];
+                        [appInfo SSDKSetupKaKaoByAppKey:[customDict objectForKey:@"app_key"]
+                                             restApiKey:[customDict objectForKey:@"rest_api_key"]
+                                            redirectUri:[customDict objectForKey:@"redirect_uri"]
+                                               authType:[customDict objectForKey:@"auth_type"]];
                         
                         *stop = YES;
                     }
@@ -3542,7 +3577,7 @@ FREObject ShareSDKCallMethod (FREContext ctx, void* functionData, uint32_t argc,
             {
                 ShareSDKGetUserInfo(ctx, [paramDict objectForKey:@"params"]);
             }
-            else if ([action isEqualToString:@"share"])
+            else if ([action isEqualToString:@"shareContent"])
             {
                 ShareSDKShare(ctx, [paramDict objectForKey:@"params"]);
             }
