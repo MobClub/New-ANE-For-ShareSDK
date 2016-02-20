@@ -121,12 +121,16 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 			boolean enableStatistics = !"false".equals(params.get("enableStatistics"));
 			ShareSDK.initSDK(getActivity(), appkey, enableStatistics);
 			
-			HashMap<String, Object> devInfo = (HashMap<String, Object>) params.get("config");
-			for(Entry<String, Object> entry: devInfo.entrySet()){
-				String p = ShareSDK.platformIdToName(Integer.parseInt(entry.getKey()));
-				System.out.println(p + " ==>>" + new Hashon().fromHashMap((HashMap<String, Object>)entry.getValue()));
-				ShareSDK.setPlatformDevInfo(p, (HashMap<String, Object>)entry.getValue());
-			}
+			final HashMap<String, Object> devInfo = (HashMap<String, Object>) params.get("config");
+			UIHandler.sendEmptyMessageDelayed(1, 500, new Callback() {
+				public boolean handleMessage(Message msg) {		
+					for(Entry<String, Object> entry: devInfo.entrySet()){
+						String p = ShareSDK.platformIdToName(Integer.parseInt(entry.getKey()));
+						ShareSDK.setPlatformDevInfo(p, (HashMap<String, Object>)entry.getValue());
+					}
+					return true;
+				}
+			});			
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
