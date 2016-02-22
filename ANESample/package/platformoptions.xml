@@ -23,6 +23,5 @@
         <packagedDependency>ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenAPI.framework</packagedDependency>
          <packagedDependency>ShareSDK/Support/PlatformSDK/FacebookMessengerSDK/FBSDKMessengerShareKit.framework</packagedDependency>
          <packagedDependency>ShareSDK/Support/PlatformSDK/RenRenSDK/RennSDK.framework</packagedDependency>
-          <packagedDependency>ShareSDK/Support/PlatformSDK/KaKaoSDK/KakaoOpenSDK.framework</packagedDependency>
     </packagedDependencies>
 </platform>
