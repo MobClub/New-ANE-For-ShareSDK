@@ -287,7 +287,6 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 				oks.disableSSOWhenAuthorize();
 			}
 			oks.setCallback(new AnePlatformActionListener(this, reqID));
-			oks.setEditPageBackground(getActivity().getWindow().getDecorView());
 			Object platform = params.get("platform");
 			if (platform != null) {
 				String platformName = ShareSDK.platformIdToName((Integer)platform);
