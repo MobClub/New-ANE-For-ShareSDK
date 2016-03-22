@@ -144,7 +144,7 @@ There is a Xcode project named ShareSDKForANE in the iOS folder in this project.
         //#define __SHARESDK_RENREN__
         //#define __SHARESDK_YIXIN__
 
-- 2.After modified ShareSDKForANE.m,you should build the project with with Simulator and iOS Device.In the "Bulid" folder other the project,you will find two kinds of libShareSDKForANE.a(Simulator and iOS Device).Please copy these  two libShareSDKForANE.a to ANESample/package/iPhone-ARM ,and to ANESample/package/iPhone-ARMiPhone-x86(Simulator for x86,iOS Device for ARM).
+- 2.After modified ShareSDKForANE.m,you should build the project with with Simulator and iOS Device.In the "Bulid" folder of the project,you will find two kinds of libShareSDKForANE.a(Simulator and iOS Device).Please copy these  two libShareSDKForANE.a to ANESample/package/iPhone-ARM ,and to ANESample/package/iPhone-ARMiPhone-x86(Simulator for x86,iOS Device for ARM).
 
 - 3.Then copy the libraries folder in the xcode project to ANESample/package/iPhone-ARM ,and to ANESample/package/iPhone-ARMiPhone-x86,and delete all the bundle file and .a file in th libraries,incldude the bundle file and .a in the libraries/extends(I believe that you have finished the copy work in "Step 1" - "3.Copy ShareSDK.bundle,ShareSDKUI.bundle and other resource" that copy the bundle and .a you need to the ANE project).
 
