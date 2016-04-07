@@ -101,11 +101,8 @@ package cn.sharesdk.ane.events
 		public function set reqID(value:int):void
 		{
 			_reqID = value;
-		}
-		
-		
-		
-	}
+		}		
+	}	
 	
 }
 

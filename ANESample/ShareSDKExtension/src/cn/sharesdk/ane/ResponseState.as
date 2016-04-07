@@ -27,4 +27,5 @@ package cn.sharesdk.ane
 		 */		
 		public static const CANCEL:int = 3;
 	}
+	
 }

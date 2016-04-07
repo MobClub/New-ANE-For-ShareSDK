@@ -1,8 +1,7 @@
 package cn.sharesdk.ane {
 	
 	/** 微信分享类型 */
-	public class ShareType {
-			
+	public class ShareType {			
 		/**
 		 *  自动适配类型，视传入的参数来决定
 		 */

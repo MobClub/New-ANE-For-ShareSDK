@@ -9,8 +9,17 @@ package
 	import flash.filesystem.File;
 	
 	import cn.sharesdk.ane.PlatformID;
+	import cn.sharesdk.ane.ShareContent;
 	import cn.sharesdk.ane.ShareSDKExtension;
-	import cn.sharesdk.ane.ShareType;
+	import cn.sharesdk.ane.platform.Facebook;
+	import cn.sharesdk.ane.platform.QQ;
+	import cn.sharesdk.ane.platform.QZone;
+	import cn.sharesdk.ane.platform.Renren;
+	import cn.sharesdk.ane.platform.SinaWeibo;
+	import cn.sharesdk.ane.platform.TencentWeibo;
+	import cn.sharesdk.ane.platform.Twitter;
+	import cn.sharesdk.ane.platform.Wechat;
+	import cn.sharesdk.ane.platform.WechatMoments;
 	
 	public class ANEDemo extends Sprite
 	{
@@ -27,61 +36,59 @@ package
 		
 			this.addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 				
-			var TotalConf:Object = new Object();
-									
-			var SinaConf:Object = new Object();
-			SinaConf["app_key"] = "568898243";
-			SinaConf["app_secret"] = "38a4f8204cc784f81f9f0daaf31e02e3";
-			SinaConf["redirect_uri"] = "http://www.sharesdk.cn";
-			SinaConf["auth_type"] = "both"; 							//iOS需要,可填入web、sso 或 both
-			TotalConf[PlatformID.SinaWeibo] = SinaConf;
+			var totalConf:Object = new Object();
 			
-			var TencentConf:Object = new Object();
-			TencentConf["app_key"] = "801307650";
-			TencentConf["app_secret"] = "ae36f4ee3946e1cbb98d6965b0b2ff5c";
-			TencentConf["redirect_uri"] = "http://www.sharesdk.cn";
-			TotalConf[PlatformID.TencentWeibo] = TencentConf;
+			var sinaConf:SinaWeibo = new SinaWeibo();				
+			sinaConf.setAppKey("568898243");
+			sinaConf.setAppSecret("38a4f8204cc784f81f9f0daaf31e02e3");
+			sinaConf.setRedirectUrl("http://www.sharesdk.cn");
+			totalConf[PlatformID.SinaWeibo] = sinaConf.getPlatformConf();
 			
-			var WechatSessionConf:Object = new Object();
-			WechatSessionConf["app_id"] = "wx4868b35061f87885";
-			WechatSessionConf["app_secret"] = "64020361b8ec4c99936c0e3999a9f249";		
+			var tencentConf:TencentWeibo = new TencentWeibo();
+			tencentConf.setAppKey("801307650");
+			tencentConf.setAppSecret("ae36f4ee3946e1cbb98d6965b0b2ff5c");
+			tencentConf.setRedirectUri("http://www.sharesdk.cn");
+			totalConf[PlatformID.TencentWeibo] = tencentConf.getPlatformConf();
 			
-			TotalConf[PlatformID.WeChat] = WechatSessionConf;
-			TotalConf[PlatformID.WeChatMoments] = WechatSessionConf;
-			TotalConf[PlatformID.WeChatFavorites] = WechatSessionConf;
+			var wechatConf:Wechat = new Wechat();
+			wechatConf.setAppId("wx4868b35061f87885");
+			wechatConf.setAppSecret("64020361b8ec4c99936c0e3999a9f249");			
+			totalConf[PlatformID.WeChat] = wechatConf.getPlatformConf();
+			
+			var wechatMomentsConf:WechatMoments = new WechatMoments();
+			wechatMomentsConf.setAppId("wx4868b35061f87885");
+			wechatMomentsConf.setAppSecret("64020361b8ec4c99936c0e3999a9f249");	
+			totalConf[PlatformID.WeChatMoments] = wechatMomentsConf.getPlatformConf();
+								
+			var qqConf:QQ = new QQ();
+			qqConf.setAppId("100371282");
+			qqConf.setAppKey("aed9b0303e3ed1e27bae87c33761161d");			
+			totalConf[PlatformID.QQ] = qqConf.getPlatformConf();
+			
+			var qzoneConf:QZone = new QZone();
+			qzoneConf.setAppId("100371282");
+			qzoneConf.setAppKey("aed9b0303e3ed1e27bae87c33761161d");
+			totalConf[PlatformID.QZone] = qzoneConf.getPlatformConf();
+			
+			var renrenConf:Renren = new Renren();
+			renrenConf.setAppId("226427");
+			renrenConf.setApiKey("fc5b8aed373c4c27a05b712acba0f8c3");
+			renrenConf.setSecretKey("f29df781abdd4f49beca5a2194676ca4");
+			totalConf[PlatformID.Renren] = renrenConf.getPlatformConf();
 					
-//			TotalConf[PlatformID.WechatSeries] = WechatSessionConf; 	// iOS中可直接通过本句配置微信系列
+			var facebookConf:Facebook = new Facebook();
+			facebookConf.setConsumerKey("107704292745179");
+			facebookConf.setConsumerSecret("38053202e1a5fe26c80c753071f0b573");
+			totalConf[PlatformID.Facebook] = facebookConf.getPlatformConf();
 			
-			var QQConf:Object = new Object();
-			QQConf["app_id"] = "100371282";
-			QQConf["app_key"] = "aed9b0303e3ed1e27bae87c33761161d";
-			QQConf["auth_type"] = "both";
+			var twitterConf:Twitter = new Twitter();
+			twitterConf.setConsumerKey("LRBM0H75rWrU9gNHvlEAA2aOy");
+			twitterConf.setConsumerSecret("gbeWsZvA9ELJSdoBzJ5oLKX0TU09UOwrzdGfo9Tg7DjyGuMe8G");
+			twitterConf.setCallbackUrl("http://mob.com");
+			totalConf[PlatformID.Twitter] = twitterConf.getPlatformConf();
 			
-			TotalConf[PlatformID.QQ] = QQConf;
-			TotalConf[PlatformID.QZone] = QQConf;
-			
-//			TotalConf[PlatformID.QQSeries] = QQConf;					// iOS中可直接通过本句配置QQ系列
-			
-			var RenrenConf:Object = new Object();
-			RenrenConf["app_id"] = "226427";
-			RenrenConf["app_key"] = "fc5b8aed373c4c27a05b712acba0f8c3";
-			RenrenConf["app_secret"] = "f29df781abdd4f49beca5a2194676ca4";
-			RenrenConf["auth_type"] = "both";
-			TotalConf[PlatformID.Renren] = RenrenConf;
-					
-			var FaceBookConf:Object = new Object();
-			FaceBookConf["api_key"] = "107704292745179";
-			FaceBookConf["app_secret"] = "38053202e1a5fe26c80c753071f0b573";
-			FaceBookConf["auth_type"] = "both";
-			TotalConf[PlatformID.Facebook] = FaceBookConf;
-			
-			var TwitterConf:Object = new Object();
-			TwitterConf["consumer_key"] = "LRBM0H75rWrU9gNHvlEAA2aOy";
-			TwitterConf["consumer_secret"] = "gbeWsZvA9ELJSdoBzJ5oLKX0TU09UOwrzdGfo9Tg7DjyGuMe8G";
-			TwitterConf["redirect_uri"] = "http://mob.com";
-			TotalConf[PlatformID.Twitter] = TwitterConf;
-			
-			shareSDK.registerAppAndSetPlatformConfig("6c7d91b85e4b",TotalConf);
+			shareSDK.initSDK("6c7d91b85e4b");  
+			shareSDK.setPlatformConfig(totalConf);
 			shareSDK.setPlatformActionListener(onComplete, onError, onCancel);
 	
 		}
@@ -99,7 +106,7 @@ package
 			authBtn.width = BUTTON_WIDTH;
 			authBtn.height = BUTTON_HEIGHT;
 			this.addChild(authBtn);
-			authBtn.addEventListener(MouseEvent.CLICK, authBtnClickHandler);
+			authBtn.addEventListener(MouseEvent.CLICK, onAuthorizeHandler);
 			
 			var cancelAuthBtn:Button = new Button();
 			cancelAuthBtn.label = "取消授权";
@@ -108,7 +115,7 @@ package
 			cancelAuthBtn.width = BUTTON_WIDTH;
 			cancelAuthBtn.height = BUTTON_HEIGHT;
 			this.addChild(cancelAuthBtn);
-			cancelAuthBtn.addEventListener(MouseEvent.CLICK, cancelAuthBtnClickHandler);
+			cancelAuthBtn.addEventListener(MouseEvent.CLICK, onCancelAuthHandler);
 			
 			var hasAuthBtn:Button = new Button();
 			hasAuthBtn.label = "检测授权";
@@ -117,7 +124,7 @@ package
 			hasAuthBtn.width = BUTTON_WIDTH;
 			hasAuthBtn.height = BUTTON_HEIGHT;
 			this.addChild(hasAuthBtn);
-			hasAuthBtn.addEventListener(MouseEvent.CLICK, hasAuthBtnClickHandler);
+			hasAuthBtn.addEventListener(MouseEvent.CLICK, onIsAuthorizedHandler);
 			
 			var getUserInfoBtn:Button = new Button();
 			getUserInfoBtn.label = "获取用户资料";
@@ -126,34 +133,25 @@ package
 			getUserInfoBtn.width = BUTTON_WIDTH;
 			getUserInfoBtn.height = BUTTON_HEIGHT;
 			this.addChild(getUserInfoBtn);
-			getUserInfoBtn.addEventListener(MouseEvent.CLICK, getUserInfoBtnClickHandler);
+			getUserInfoBtn.addEventListener(MouseEvent.CLICK, onGetUserInfoHandler);
 			
 			var shareBtn:Button = new Button();
-			shareBtn.label = "分享";
+			shareBtn.label = "直接分享";
 			shareBtn.x = 100;
 			shareBtn.y = getUserInfoBtn.y + getUserInfoBtn.height + 10;
 			shareBtn.width = BUTTON_WIDTH;
 			shareBtn.height = BUTTON_HEIGHT;
 			this.addChild(shareBtn);
-			shareBtn.addEventListener(MouseEvent.CLICK, shareBtnClickHandler);
-			
-			var oneKeyShareBtn:Button = new Button();
-			oneKeyShareBtn.label = "一键分享";
-			oneKeyShareBtn.x = 100;
-			oneKeyShareBtn.y = shareBtn.y + shareBtn.height + 10;
-			oneKeyShareBtn.width = BUTTON_WIDTH;
-			oneKeyShareBtn.height = BUTTON_HEIGHT;
-			this.addChild(oneKeyShareBtn);
-			oneKeyShareBtn.addEventListener(MouseEvent.CLICK, oneKeyShareBtnClickHandler);
-			
+			shareBtn.addEventListener(MouseEvent.CLICK, onShareContentHandler);
+						
 			var shareMenuBtn:Button = new Button();
 			shareMenuBtn.label = "显示分享菜单";
 			shareMenuBtn.x = 100;
-			shareMenuBtn.y = oneKeyShareBtn.y + oneKeyShareBtn.height + 10;
+			shareMenuBtn.y = shareBtn.y + shareBtn.height + 10;
 			shareMenuBtn.width = BUTTON_WIDTH;
 			shareMenuBtn.height = BUTTON_HEIGHT;
 			this.addChild(shareMenuBtn);
-			shareMenuBtn.addEventListener(MouseEvent.CLICK, shareMenuBtnClickHandler);
+			shareMenuBtn.addEventListener(MouseEvent.CLICK, onShowPlatformListHandler);
 			
 			var shareViewBtn:Button = new Button();
 			shareViewBtn.label = "显示分享编辑页";
@@ -162,7 +160,7 @@ package
 			shareViewBtn.width = BUTTON_WIDTH;
 			shareViewBtn.height = BUTTON_HEIGHT;
 			this.addChild(shareViewBtn);
-			shareViewBtn.addEventListener(MouseEvent.CLICK, shareViewBtnClickHandler);
+			shareViewBtn.addEventListener(MouseEvent.CLICK, onShowShareContentEditorHandler);
 			
 			var checkClientBtn:Button = new Button();
 			checkClientBtn.label = "检测客户端";
@@ -171,7 +169,7 @@ package
 			checkClientBtn.width = BUTTON_WIDTH;
 			checkClientBtn.height = BUTTON_HEIGHT;
 			this.addChild(checkClientBtn);
-			checkClientBtn.addEventListener(MouseEvent.CLICK, checkClientBtnClickHandler);
+			checkClientBtn.addEventListener(MouseEvent.CLICK, onIsClientValidHandler);
 			
 			var getCredentialBtn:Button = new Button();
 			getCredentialBtn.label = "获取授权信息";
@@ -180,7 +178,7 @@ package
 			getCredentialBtn.width = BUTTON_WIDTH;
 			getCredentialBtn.height = BUTTON_HEIGHT;
 			this.addChild(getCredentialBtn);
-			getCredentialBtn.addEventListener(MouseEvent.CLICK, getCredentialBtnClickHandler);
+			getCredentialBtn.addEventListener(MouseEvent.CLICK, onGetAuthInfoHandler);
 			
 			var addFriendBtn:Button = new Button();
 			addFriendBtn.label = "添加好友";
@@ -189,7 +187,7 @@ package
 			addFriendBtn.width = BUTTON_WIDTH;
 			addFriendBtn.height = BUTTON_HEIGHT;
 			this.addChild(addFriendBtn);
-			addFriendBtn.addEventListener(MouseEvent.CLICK, addFriendBtnClickHandler);
+			addFriendBtn.addEventListener(MouseEvent.CLICK, onAddFriendHandler);
 			
 			var getFriendListBtn:Button = new Button();
 			getFriendListBtn.label = "获取好友列表";
@@ -198,7 +196,7 @@ package
 			getFriendListBtn.width = BUTTON_WIDTH;
 			getFriendListBtn.height = BUTTON_HEIGHT;
 			this.addChild(getFriendListBtn);
-			getFriendListBtn.addEventListener(MouseEvent.CLICK, getFriendListBtnClickHandler);
+			getFriendListBtn.addEventListener(MouseEvent.CLICK, onGetFriendListHandler);
 				
 		}
 		
@@ -223,108 +221,86 @@ package
 			shareSDK.toast(message);
 		}
 		
-		private function authBtnClickHandler(event:MouseEvent):int
+		private function onAuthorizeHandler(event:MouseEvent):int
 		{
 			return shareSDK.authorize(PlatformID.SinaWeibo);
 		}
 		
-		private function cancelAuthBtnClickHandler(event:MouseEvent):void
+		private function onCancelAuthHandler(event:MouseEvent):void
 		{
 			shareSDK.cancelAuthorize(PlatformID.SinaWeibo);
 		}
 		
-		private function hasAuthBtnClickHandler(event:MouseEvent):void
+		private function onIsAuthorizedHandler(event:MouseEvent):void
 		{
-			var isValid:Boolean = shareSDK.isAuthorizedValid(PlatformID.SinaWeibo);
+			var isValid:Boolean = shareSDK.isAuthorized(PlatformID.SinaWeibo);
 			shareSDK.toast("isValid = " + isValid);
 		}
 		
-		private function checkClientBtnClickHandler(event:MouseEvent):void
+		private function onIsClientValidHandler(event:MouseEvent):void
 		{
 			var isInstalled:Boolean = shareSDK.isClientValid(PlatformID.WeChat);
 			
 			shareSDK.toast("isInstalled =" + isInstalled);
 		}
-		private function getUserInfoBtnClickHandler(event:MouseEvent):int
+		private function onGetUserInfoHandler(event:MouseEvent):int
 		{
 			return shareSDK.getUserInfo(PlatformID.TencentWeibo);
 		}
 		
-		private function shareBtnClickHandler(event:MouseEvent):int
+		private function onShareContentHandler(event:MouseEvent):int
 		{
-			var shareParams:Object = new Object();
-			shareParams.text = "这是分享的Text";
-			shareParams.title = "ShareSDK for ANE发布";
-			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";	
-			shareParams.type = ShareType.SSDKContentTypeImage;
+			var shareParams:ShareContent = new ShareContent();
+			shareParams.setText("这是分享的Text");
+			shareParams.setTitle("ShareSDK for ANE发布");
+			shareParams.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");	
 			return shareSDK.shareContent(PlatformID.SinaWeibo, shareParams);
 		}
 		
-		private function oneKeyShareBtnClickHandler(event:MouseEvent):int
+		private function onShowPlatformListHandler(event:MouseEvent):int
 		{
-			var platforms:Array = new Array(PlatformID.SinaWeibo, PlatformID.TencentWeibo);
-			var shareParams:Object = new Object();
-			shareParams.text = "好耶～好高兴啊～";
-			shareParams.title = "ShareSDK for ANE发布";
-			shareParams.url = "http://mob.com";
-			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";	
-			shareParams.type = ShareType.SSDKContentTypeImage;
-			return shareSDK.oneKeyShareContent(platforms, shareParams);
-		}
-		
-		private function shareMenuBtnClickHandler(event:MouseEvent):int
-		{
-			var shareParams:Object = new Object();
+			var shareParams:ShareContent = new ShareContent();
 			//自定义菜单数组
 			var shareList:Array = new Array(PlatformID.SinaWeibo,PlatformID.WeChat);	
-			shareParams.text = "ShareSDK 3.0 for ANE Text";
-			shareParams.title = "ShareSDK 3.0 for ANE Title";
-			shareParams.url = "http://mob.com";
-			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";
-			shareParams.type = ShareType.SSDKContentTypeWebPage;
+			shareParams.setText("ShareSDK 3.0 for ANE Text");
+			shareParams.setTitle("ShareSDK 3.0 for ANE Title");
+			shareParams.setUrl("http://mob.com");
+			shareParams.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
 			
-			//定制指定平台的分享内容(目前仅对iOS有效)
-			var sinaParams:Object = new Object();
-			sinaParams.text = "ANE Sina Text";
-			sinaParams.title = "ANE Sina Title";
-			var file:File = File.applicationDirectory.resolvePath("mac.jpeg");
-			sinaParams.imageUrl = file.nativePath;
-			sinaParams.url = "http://mob.com";
-			sinaParams.latitude = "55.55";
-			sinaParams.longitude = "66.66";
-			sinaParams.objectID = "sinaId";
-			sinaParams.type = ShareType.SSDKContentTypeImage;
-			shareParams[PlatformID.SinaWeibo] = sinaParams;
+			//定制指定平台的分享内容
+			var twParams:ShareContent = new ShareContent();
+			twParams.setText("ANE TencentWeibo Text");
+			twParams.setTitle("ANE TencentWeibo Title");
+			twParams.setUrl("http://mob.com");
 			
-			return shareSDK.showShareMenu(null, shareParams, 320, 460);
+			shareParams.setShareContentCustomize(PlatformID.TencentWeibo, twParams);			
+			return shareSDK.showPlatformList(null, shareParams, 320, 460);
 		}
 		
-		private function shareViewBtnClickHandler(event:MouseEvent):int
+		private function onShowShareContentEditorHandler(event:MouseEvent):int
 		{
-			var shareParams:Object = new Object();
-//			var file:File = File.applicationDirectory.resolvePath("mac.jpeg");
-//			shareParams.imageUrl = file.nativePath;
-			shareParams.text = "ShareSDK 3.0 for ANE Text";
-			shareParams.title = "ShareSDK 3.0 for ANE Title";
-			shareParams.url = "http://mob.com";
-			shareParams.imageUrl = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";
-			shareParams.type = ShareType.SSDKContentTypeWebPage;
-			return shareSDK.showShareView(PlatformID.SinaWeibo, shareParams);
+			var shareParams:ShareContent = new ShareContent();
+			shareParams.setText("ShareSDK 3.0 for ANE Text");
+			shareParams.setTitle("ShareSDK 3.0 for ANE Title");
+			shareParams.setUrl("http://mob.com");
+			shareParams.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");			
+			
+			return shareSDK.showShareContentEditor(PlatformID.SinaWeibo, shareParams);
 		}	
 		
-		private function getCredentialBtnClickHandler(event:MouseEvent):void
+		private function onGetAuthInfoHandler(event:MouseEvent):void
 		{
 			var authInfo:Object = shareSDK.getAuthInfo(PlatformID.SinaWeibo);
 			var json:String = (authInfo == null ? "" : JSON.stringify(authInfo));
 			shareSDK.toast("authInfo = " + json);
 		}
 		
-		private function addFriendBtnClickHandler(event:MouseEvent):int
+		private function onAddFriendHandler(event:MouseEvent):int
 		{
 			return shareSDK.addFriend(PlatformID.TencentWeibo,"ShareSDK");
 		}
 		
-		private function getFriendListBtnClickHandler(event:MouseEvent):int
+		private function onGetFriendListHandler(event:MouseEvent):int
 		{
 			return shareSDK.getFriendList(PlatformID.SinaWeibo,20,1);
 		}

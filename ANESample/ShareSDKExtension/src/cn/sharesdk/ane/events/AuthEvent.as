@@ -1,6 +1,6 @@
 package cn.sharesdk.ane.events
 {
-	import flash.events.Event;
+	import flash.events.Event;	
 	
 	/**
 	 * 授权事件 
@@ -103,6 +103,6 @@ package cn.sharesdk.ane.events
 		{
 			_reqID = value;
 		}
-
 	}
+	
 }

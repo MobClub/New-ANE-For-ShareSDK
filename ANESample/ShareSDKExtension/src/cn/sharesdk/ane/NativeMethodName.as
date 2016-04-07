@@ -1,13 +1,16 @@
 package cn.sharesdk.ane 
-{
-	
+{	
 	public class NativeMethodName 
-	{
-			
+	{			
 		/**
 		 * 配置 
 		 */		
-		public static const REGISTER_APP_AND_SET_PLATFORM_CONF:String = "registerAppAndSetPlatformConfig";
+		public static const INIT_SDK:String = "initSDK";
+		
+		/**
+		 * 配置 
+		 */		
+		public static const SET_PLATFORM_CONFIG:String = "setPlatformConfig";
 		
 		/**
 		 * 授权 
@@ -22,7 +25,7 @@ package cn.sharesdk.ane
 		/**
 		 * 是否已经授权 
 		 */		
-		public static const IS_AUTHORIZED_VALID:String = "isAuthorizedValid";
+		public static const IS_AUTHORIZED:String = "isAuthorized";
 		
 		/**
 		 * 获取用户信息 
@@ -42,12 +45,12 @@ package cn.sharesdk.ane
 		/**
 		 * 显示分享菜单 
 		 */		
-		public static const SHOW_SHARE_MENU:String = "showShareMenu";
+		public static const SHOW_PLATFORM_LIST:String = "ShowPlatformList";
 		
 		/**
 		 * 显示分享视图 
 		 */		
-		public static const SHOW_SHARE_VIEW:String = "showShareView";
+		public static const SHOW_SHARE_CONTENT_EDITOR:String = "ShowShareContentEditor";
 		
 		/**
 		 * 检测客户端是否安装 
@@ -72,8 +75,7 @@ package cn.sharesdk.ane
 		/**
 		 * 是否开启SSO授权
 		 */
-		public static const CLOSE_SSO_WHEN_AUTHORIZE:String = "closeSSOWhenAuthorize";
-		
+		public static const DISABLE_SSO:String = "disableSSO";		
 	}
 	
 }

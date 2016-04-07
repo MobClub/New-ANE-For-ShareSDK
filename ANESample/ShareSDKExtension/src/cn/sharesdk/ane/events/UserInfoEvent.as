@@ -124,6 +124,6 @@ package cn.sharesdk.ane.events
 		{
 			_reqID = value;
 		}
-
 	}
+	
 }

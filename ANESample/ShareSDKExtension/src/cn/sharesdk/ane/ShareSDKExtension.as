@@ -221,12 +221,19 @@ package cn.sharesdk.ane
 		}
 		
 		//设置平台信息
-		public function registerAppAndSetPlatformConfig(appkey:String ,config:Object):void
+		public function initSDK(appKey:String):void
 		{
 			var params:Object = new Object();
-			params.appkey = appkey;
+			params.appKey = appKey;
+			apiCaller(NativeMethodName.INIT_SDK, params);		
+		}
+		
+		//设置平台信息
+		public function setPlatformConfig(config:Object):void
+		{
+			var params:Object = new Object();
 			params.config = config;
-			apiCaller(NativeMethodName.REGISTER_APP_AND_SET_PLATFORM_CONF, params);		
+			apiCaller(NativeMethodName.SET_PLATFORM_CONFIG, params);		
 		}
 		
 		//授权
@@ -249,11 +256,11 @@ package cn.sharesdk.ane
 		}
 		
 		//判断授权是否有效
-		public function isAuthorizedValid(platform:int):Boolean 
+		public function isAuthorized(platform:int):Boolean 
 		{
 			var params:Object = new Object();
 			params.platform = platform;
-			var obj:Object = apiCaller(NativeMethodName.IS_AUTHORIZED_VALID, params);					
+			var obj:Object = apiCaller(NativeMethodName.IS_AUTHORIZED, params);					
 			if (obj == null)
 			{
 				return false;
@@ -293,52 +300,60 @@ package cn.sharesdk.ane
 		}
 		
 		//分享，没有编辑界面
-		public function shareContent(platform:int, shareParams:Object):int 
+		public function shareContent(platform:int, shareParams:ShareContent):int 
 		{
 			reqID ++;
 			var params:Object = new Object();
 			params.platform = platform;
-			params.shareParams = shareParams;
+			if (shareParams != null) {
+				params.shareParams = shareParams.getShareParams();
+			}
 			params.reqID = reqID;
 			apiCaller(NativeMethodName.SHARE_CONTENT, params);
 			return reqID;
 		}
 		
 		//多个平台分享，没有编辑界面；不推荐使用，用户体验不好；建议使用shareContent
-		public function oneKeyShareContent(platforms:Array, shareParams:Object):int 
+		public function oneKeyShareContent(platforms:Array, shareParams:ShareContent):int 
 		{
 			reqID ++;
 			var params:Object = new Object();
 			params.platforms = platforms;
-			params.shareParams = shareParams;
+			if (shareParams != null) {
+				params.shareParams = shareParams.getShareParams();
+			}
 			params.reqID = reqID;
 			apiCaller(NativeMethodName.MULTI_SHARE, params);
 			return reqID;
 		}
 		
 		//分享，显示九宫格
-		public function showShareMenu(platforms:Array = null, shareParams:Object = null, x:Number = 0, y:Number = 0):int
+		public function showPlatformList(platforms:Array = null, shareParams:ShareContent = null, x:Number = 0, y:Number = 0):int
 		{
 			reqID ++;
 			var params:Object = new Object();
 			params.platforms = platforms;
-			params.shareParams = shareParams;
+			if (shareParams != null) {
+				params.shareParams = shareParams.getShareParams();
+			}
 			params.x = x;
 			params.y = y;
 			params.reqID = reqID;
-			apiCaller(NativeMethodName.SHOW_SHARE_MENU, params);
+			apiCaller(NativeMethodName.SHOW_PLATFORM_LIST, params);
 			return reqID;
 		}
 		
 		//分享，直接进入编辑界面
-		public function showShareView(platform:int, shareParams:Object = null):int 
+		public function showShareContentEditor(platform:int, shareParams:ShareContent = null):int 
 		{
 			reqID ++;
 			var params:Object = new Object();
 			params.platform = platform;
-			params.shareParams = shareParams;
+			if (shareParams != null) {
+				params.shareParams = shareParams.getShareParams();
+			}
 			params.reqID = reqID;
-			apiCaller(NativeMethodName.SHOW_SHARE_VIEW, params);
+			apiCaller(NativeMethodName.SHOW_SHARE_CONTENT_EDITOR, params);
 			return reqID;
 		}
 		
@@ -392,11 +407,11 @@ package cn.sharesdk.ane
 		}
 		
 		//关闭SSO授权
-		public function closeSSOWhenAuthorize(close:Boolean):void 
+		public function disableSSO(close:Boolean):void 
 		{
 			var params:Object = new Object();
 			params.close = close;
-			apiCaller(NativeMethodName.CLOSE_SSO_WHEN_AUTHORIZE, params);
+			apiCaller(NativeMethodName.DISABLE_SSO, params);
 		}		
 		
 		//监听结果：成功
@@ -424,8 +439,7 @@ package cn.sharesdk.ane
 			{
 				onErr(reqID, platform, action, err);
 			}
-		}		
-		
+		}				
 	}
 	
 }

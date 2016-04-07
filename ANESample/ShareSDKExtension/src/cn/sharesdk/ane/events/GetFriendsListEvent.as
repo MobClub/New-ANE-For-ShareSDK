@@ -7,8 +7,7 @@ package cn.sharesdk.ane.events
 	 * 
 	 */	
 	public class GetFriendsListEvent extends Event
-	{
-		
+	{		
 		public function GetFriendsListEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);

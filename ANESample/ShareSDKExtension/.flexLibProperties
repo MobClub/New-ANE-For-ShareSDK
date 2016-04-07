@@ -5,11 +5,56 @@
     <classEntry path="cn.sharesdk.ane.NativeMethodName"/>
     <classEntry path="cn.sharesdk.ane.PlatformID"/>
     <classEntry path="cn.sharesdk.ane.ResponseState"/>
+    <classEntry path="cn.sharesdk.ane.ShareContent"/>
     <classEntry path="cn.sharesdk.ane.ShareSDKExtension"/>
     <classEntry path="cn.sharesdk.ane.ShareType"/>
+    <classEntry path="cn.sharesdk.ane.events.AddFriendEvent"/>
     <classEntry path="cn.sharesdk.ane.events.AuthEvent"/>
+    <classEntry path="cn.sharesdk.ane.events.GetFriendsListEvent"/>
     <classEntry path="cn.sharesdk.ane.events.ShareEvent"/>
     <classEntry path="cn.sharesdk.ane.events.UserInfoEvent"/>
+	
+    <classEntry path="cn.sharesdk.ane.platform.Alipay"/>
+    <classEntry path="cn.sharesdk.ane.platform.Bluetooth"/>
+    <classEntry path="cn.sharesdk.ane.platform.Douban"/>
+    <classEntry path="cn.sharesdk.ane.platform.Dropbox"/>
+    <classEntry path="cn.sharesdk.ane.platform.Evernote"/>
+    <classEntry path="cn.sharesdk.ane.platform.Facebook"/>
+    <classEntry path="cn.sharesdk.ane.platform.FacebookMessenger"/>
+    <classEntry path="cn.sharesdk.ane.platform.Flickr"/>
+    <classEntry path="cn.sharesdk.ane.platform.FourSquare"/>
+    <classEntry path="cn.sharesdk.ane.platform.GooglePlus"/>
+    <classEntry path="cn.sharesdk.ane.platform.Instagram"/>
+    <classEntry path="cn.sharesdk.ane.platform.Instapaper"/>
+	
+    <classEntry path="cn.sharesdk.ane.platform.Kaixin"/>
+    <classEntry path="cn.sharesdk.ane.platform.KakaoStory"/>
+    <classEntry path="cn.sharesdk.ane.platform.KakaoTalk"/>
+    <classEntry path="cn.sharesdk.ane.platform.Line"/>
+    <classEntry path="cn.sharesdk.ane.platform.LinkedIn"/>
+    <classEntry path="cn.sharesdk.ane.platform.Mail"/>
+    <classEntry path="cn.sharesdk.ane.platform.MingDao"/>
+    <classEntry path="cn.sharesdk.ane.platform.Pinterest"/>
+    <classEntry path="cn.sharesdk.ane.platform.Pocket"/>
+    <classEntry path="cn.sharesdk.ane.platform.QQ"/>
+    <classEntry path="cn.sharesdk.ane.platform.QZone"/>
+    <classEntry path="cn.sharesdk.ane.platform.Renren"/>		
+	
+    <classEntry path="cn.sharesdk.ane.platform.SinaWeibo"/>
+    <classEntry path="cn.sharesdk.ane.platform.SMS"/>
+    <classEntry path="cn.sharesdk.ane.platform.TencentWeibo"/>
+    <classEntry path="cn.sharesdk.ane.platform.Tumblr"/>
+    <classEntry path="cn.sharesdk.ane.platform.Twitter"/>
+    <classEntry path="cn.sharesdk.ane.platform.VKontakte"/>
+	
+    <classEntry path="cn.sharesdk.ane.platform.Wechat"/>
+    <classEntry path="cn.sharesdk.ane.platform.WechatFavorites"/>
+    <classEntry path="cn.sharesdk.ane.platform.WechatMoments"/>
+    <classEntry path="cn.sharesdk.ane.platform.WhatsApp"/>
+    <classEntry path="cn.sharesdk.ane.platform.YiXin"/>
+    <classEntry path="cn.sharesdk.ane.platform.YiXinMoments"/>
+    <classEntry path="cn.sharesdk.ane.platform.Youdao"/>
+		
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

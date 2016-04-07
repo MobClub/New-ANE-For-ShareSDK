@@ -13,6 +13,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREExtension;
@@ -24,7 +25,7 @@ import com.mob.tools.utils.UIHandler;
 public class ShareSDKUtils extends FREContext implements FREExtension, FREFunction {
 	private Hashon hashon;
 	private boolean disableSSO = false; 
-	private boolean debug = true;
+	private boolean DEBUG = true;
 
 	public ShareSDKUtils() {
 		super();
@@ -58,19 +59,21 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 					String action = (String) data.get("action");
 					@SuppressWarnings("unchecked")
 					HashMap<String, Object> params = (HashMap<String, Object>) data.get("params");
-					if (debug) {
+					if (DEBUG) {
 						Log.d("action ==>> ", action);
 						Log.d("params ==>>", new Hashon().fromHashMap(params));
 					}
 					String resp = null;
-					if ("registerAppAndSetPlatformConfig".equals(action)) {
-						resp = registerAppAndSetPlatformConfig(params);
+					if ("initSDK".equals(action)) {
+						resp = initSDK(params);
+					} else if ("setPlatformConfig".equals(action)) {
+						resp = setPlatformConfig(params);
 					} else if ("authorize".equals(action)) {
 						resp = authorize(params);
 					} else if ("cancelAuthorize".equals(action)) {
 						resp = removeAccount(params);
-					} else if ("isAuthorizedValid".equals(action)) {
-						resp = isAuthValid(params);
+					} else if ("isAuthorized".equals(action)) {
+						resp = isAuthorized(params);
 					} else if ("isClientValid".equals(action)) {
 						resp = isClientValid(params);
 					} else if ("getUserInfo".equals(action)) {
@@ -79,7 +82,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 						resp = shareContent(params);
 					} else if ("multishare".equals(action)) {
 						resp = multishare(params);
-					} else if ("showShareMenu".equals(action) || "showShareView".equals(action)) {
+					} else if ("ShowPlatformList".equals(action) || "ShowShareContentEditor".equals(action)) {
 						resp = onekeyShare(params);
 					} else if ("toast".equals(action)) {
 						resp = toast(params);
@@ -89,8 +92,8 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 						resp = followFriend(params);
 					} else if ("getAuthInfo".equals(action)) {
 						resp = getAuthInfo(params);
-					} else if ("closeSSOWhenAuthorize".equals(action)) {
-						resp = closeSSOWhenAuthorize(params);
+					} else if ("disableSSO".equals(action)) {
+						resp = disableSSO(params);
 					}
 					return resp == null ? null : FREObject.newObject(resp);
 				}
@@ -103,7 +106,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	
 	// ============================ Java Actions ============================
 		
-	public String closeSSOWhenAuthorize(HashMap<String, Object> params){
+	public String disableSSO(HashMap<String, Object> params){
 		boolean close  = (Boolean) params.get("close");
 		disableSSO = close;
 		return null;
@@ -114,13 +117,25 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	 * @param params
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	private String registerAppAndSetPlatformConfig(HashMap<String, Object> params) {
+	private String initSDK(HashMap<String, Object> params) {
 		try {
-			String appkey = (String) params.get("appkey");
+			String appkey = (String) params.get("appKey");
 			boolean enableStatistics = !"false".equals(params.get("enableStatistics"));
-			ShareSDK.initSDK(getActivity(), appkey, enableStatistics);
-			
+			ShareSDK.initSDK(getActivity(), appkey, enableStatistics);		
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**Initialize the shareSDK and
+	 * Code configuration platform of information
+	 * @param params
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private String setPlatformConfig(HashMap<String, Object> params) {
+		try {			
 			final HashMap<String, Object> devInfo = (HashMap<String, Object>) params.get("config");
 			UIHandler.sendEmptyMessageDelayed(1, 500, new Callback() {
 				public boolean handleMessage(Message msg) {		
@@ -136,7 +151,6 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		}
 		return null;
 	}
-	
 	/**
 	 * To obtain authorization
 	 * @param params
@@ -169,7 +183,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	 * @param params
 	 * @return
 	 */
-	private String isAuthValid(HashMap<String, Object> params) {
+	private String isAuthorized(HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
 		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
@@ -207,13 +221,14 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	 * @param params
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private String shareContent(HashMap<String, Object> params) {
 		int reqID = (Integer) params.get("reqID");
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
 		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
-		platform.setPlatformActionListener(new AnePlatformActionListener(this, reqID));
-		@SuppressWarnings("unchecked")
+		AnePlatformActionListener paListener = new AnePlatformActionListener(this, reqID);
+		platform.setPlatformActionListener(paListener);
 		HashMap<String, Object> shareParams = (HashMap<String, Object>) params.get("shareParams");
 		ShareParams sp = new ShareParams(shareParams);
 		int shareType = sp.getShareType();
@@ -222,6 +237,28 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		}
 		sp.setShareType(shareType);
 		platform.SSOSetting(disableSSO);
+		try {
+			//不同平台，分享不同内容
+			if (params.containsKey("customizeShareParams")) {
+				final HashMap<String, Object> customizeSP = (HashMap<String, Object>) params.get("customizeShareParams");
+				if (customizeSP != null && customizeSP.size() > 0) {
+					String pID = String.valueOf(platformId);
+					if (customizeSP.containsKey(pID)) {
+						HashMap<String, Object> data = (HashMap<String, Object>) customizeSP.get(pID);
+						if (data != null && data.size() > 0) {
+							if (DEBUG) {
+								System.out.println("share content ==>>" + new Hashon().fromHashMap(data));
+							}
+							for (String key : data.keySet()) {
+								sp.set(key, data.get(key));
+							}
+						}
+					}								
+				}
+			}				
+		} catch (Throwable t) {
+			paListener.onError(platform, Platform.ACTION_SHARE, t);
+		}
 		platform.share(sp);
 		return null;
 	}
@@ -247,9 +284,9 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	 * @param params
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private String onekeyShare(HashMap<String, Object> params) {
 		int reqID = (Integer) params.get("reqID");
-		@SuppressWarnings("unchecked")
 		HashMap<String, Object> map = (HashMap<String, Object>) params.get("shareParams");
 		if (map != null) {
 			OnekeyShare oks = new OnekeyShare();
@@ -285,6 +322,29 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 			}
 			if(disableSSO){
 				oks.disableSSOWhenAuthorize();
+			}
+			//不同平台，分享不同内容
+			if (map.containsKey("customizeShareParams")) {
+				final HashMap<String, Object> customizeSP = (HashMap<String, Object>) map.get("customizeShareParams");
+				if (customizeSP != null && customizeSP.size() > 0) {
+					oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
+						public void onShare(Platform platform, ShareParams paramsToShare) {
+							String platformID = String.valueOf(ShareSDK.platformNameToId(platform.getName()));
+							if (customizeSP.containsKey(platformID)) {
+								Hashon hashon = new Hashon();
+								HashMap<String, Object> content = (HashMap<String, Object>) customizeSP.get(platformID);
+								if (content != null && content.size() > 0) {
+									if (DEBUG) {
+										System.out.println("customizeShareParams content ==>>" + hashon.fromHashMap(content));
+									}
+									for (String key : content.keySet()) {
+										paramsToShare.set(key, content.get(key));
+									}
+								}
+							}
+						}
+					});
+				}
 			}
 			oks.setCallback(new AnePlatformActionListener(this, reqID));
 			Object platform = params.get("platform");
