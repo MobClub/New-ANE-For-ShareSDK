@@ -153,7 +153,7 @@ There is a Xcode project named ShareSDKForANE in the iOS folder in this project.
 
 - 3.Then copy the ShareSDK folder in the xcode project to ANESample/package/iPhone-ARM ,and to ANESample/package/iPhone-ARMiPhone-x86,and delete all the bundle file and .a file in th libraries,incldude the bundle file and .a in the ShareSDK/Support/PlatformSDK (I believe that you have finished the copy work in "Step 1" - "3.Copy ShareSDK.bundle,ShareSDKUI.bundle and other resource" that copy the bundle and .a you need to the ANE project).
 
-![image](http://wiki.mob.com/wp-content/uploads/2015/12/4.jpg)
+![image](http://wiki.mob.com/wp-content/uploads/2015/12/123.jpg)
 
 - 4.Open ANESample/package/platformoptions.xml,you can delete some platform's framework's path you don't need.
 
