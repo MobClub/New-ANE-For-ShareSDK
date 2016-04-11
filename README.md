@@ -54,8 +54,11 @@ For the SSO login or Sharing on Wechat or QQ/QZone, you need to set URL Schemes.
 #####3. set the platform's configuration
 
 i.creat a "total" Object to add the platform's object.'
+
 ii.creat the objects to set platforms configuration
+
 iii.call initSDK passing and appkey(you can apply for an appkey from mob.com) and call setPlatformConfig pass the total object.
+
 iiii. set action's call back by call setPlatformActionListener 
 
 here is the example code:
