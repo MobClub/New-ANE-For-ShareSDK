@@ -6,7 +6,7 @@ package cn.sharesdk.ane
 	import flash.events.InvokeEvent;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
-	
+	import flash.system.Capabilities;
 	import cn.sharesdk.ane.events.AddFriendEvent;
 	import cn.sharesdk.ane.events.AuthEvent;
 	import cn.sharesdk.ane.events.GetFriendsListEvent;
@@ -15,6 +15,7 @@ package cn.sharesdk.ane
 	
 	public class ShareSDKExtension implements IEventDispatcher 
 	{
+		private var SDKKey:String;
 		private var reqID:int;
 		private var context:ExtensionContext;
 		private var onCom:Function;
@@ -225,6 +226,7 @@ package cn.sharesdk.ane
 		{
 			var params:Object = new Object();
 			params.appKey = appKey;
+			SDKKey = appKey;
 			apiCaller(NativeMethodName.INIT_SDK, params);		
 		}
 		
@@ -233,6 +235,12 @@ package cn.sharesdk.ane
 		{
 			var params:Object = new Object();
 			params.config = config;
+			//对于iOS需要将SDKKey一并传过去
+	 		if (Capabilities.manufacturer.indexOf("iOS") != -1)
+			{
+		 		params.appkey = SDKKey;
+			}
+			
 			apiCaller(NativeMethodName.SET_PLATFORM_CONFIG, params);		
 		}
 		

@@ -286,6 +286,12 @@ package cn.sharesdk.ane {
 			shareParams["urlDescription"] = urlDescription;
 		}
 		
+		/*iOS Only - Pinterst*/
+		public function setBoardID(boardId:String):void
+		{
+			shareParams["boardID"] = boardId;
+		}
+		
 		/*iOS Only - WhatsApp/Instagram*/
 		public function setMenuX(menuX:String):void
 		{

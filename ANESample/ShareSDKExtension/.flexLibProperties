@@ -13,7 +13,6 @@
     <classEntry path="cn.sharesdk.ane.events.GetFriendsListEvent"/>
     <classEntry path="cn.sharesdk.ane.events.ShareEvent"/>
     <classEntry path="cn.sharesdk.ane.events.UserInfoEvent"/>
-	
     <classEntry path="cn.sharesdk.ane.platform.Alipay"/>
     <classEntry path="cn.sharesdk.ane.platform.Bluetooth"/>
     <classEntry path="cn.sharesdk.ane.platform.Douban"/>
@@ -26,7 +25,6 @@
     <classEntry path="cn.sharesdk.ane.platform.GooglePlus"/>
     <classEntry path="cn.sharesdk.ane.platform.Instagram"/>
     <classEntry path="cn.sharesdk.ane.platform.Instapaper"/>
-	
     <classEntry path="cn.sharesdk.ane.platform.Kaixin"/>
     <classEntry path="cn.sharesdk.ane.platform.KakaoStory"/>
     <classEntry path="cn.sharesdk.ane.platform.KakaoTalk"/>
@@ -38,15 +36,13 @@
     <classEntry path="cn.sharesdk.ane.platform.Pocket"/>
     <classEntry path="cn.sharesdk.ane.platform.QQ"/>
     <classEntry path="cn.sharesdk.ane.platform.QZone"/>
-    <classEntry path="cn.sharesdk.ane.platform.Renren"/>		
-	
+    <classEntry path="cn.sharesdk.ane.platform.Renren"/>
     <classEntry path="cn.sharesdk.ane.platform.SinaWeibo"/>
     <classEntry path="cn.sharesdk.ane.platform.SMS"/>
     <classEntry path="cn.sharesdk.ane.platform.TencentWeibo"/>
     <classEntry path="cn.sharesdk.ane.platform.Tumblr"/>
     <classEntry path="cn.sharesdk.ane.platform.Twitter"/>
     <classEntry path="cn.sharesdk.ane.platform.VKontakte"/>
-	
     <classEntry path="cn.sharesdk.ane.platform.Wechat"/>
     <classEntry path="cn.sharesdk.ane.platform.WechatFavorites"/>
     <classEntry path="cn.sharesdk.ane.platform.WechatMoments"/>
@@ -54,7 +50,7 @@
     <classEntry path="cn.sharesdk.ane.platform.YiXin"/>
     <classEntry path="cn.sharesdk.ane.platform.YiXinMoments"/>
     <classEntry path="cn.sharesdk.ane.platform.Youdao"/>
-		
+    <classEntry path="cn.sharesdk.ane.platform.YiXinFav"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

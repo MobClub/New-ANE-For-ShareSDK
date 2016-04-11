@@ -10,48 +10,173 @@
   </features>
   <libraries>
     <library path="library.swf">
-      <script name="cn/sharesdk/ane/events/AddFriendEvent" mod="1453970543000" signatureChecksum="3743514718" >
+      <script name="cn/sharesdk/ane/platform/DevInfo" mod="1460087158000" signatureChecksum="3773254723" >
+        <def id="cn.sharesdk.ane.platform:DevInfo" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="Object" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Tumblr" mod="1460102597000" signatureChecksum="3647621868" >
+        <def id="cn.sharesdk.ane.platform:Tumblr" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/FourSquare" mod="1460025760000" signatureChecksum="1850228786" >
+        <def id="cn.sharesdk.ane.platform:FourSquare" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Kaixin" mod="1460099765000" signatureChecksum="4278273768" >
+        <def id="cn.sharesdk.ane.platform:Kaixin" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/QZone" mod="1460101043000" signatureChecksum="2717798971" >
+        <def id="cn.sharesdk.ane.platform:QZone" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/KakaoTalk" mod="1460100070000" signatureChecksum="2758759359" >
+        <def id="cn.sharesdk.ane.platform:KakaoTalk" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Bluetooth" mod="1460025760000" signatureChecksum="3936625042" >
+        <def id="cn.sharesdk.ane.platform:Bluetooth" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/events/AddFriendEvent" mod="1460025760000" signatureChecksum="3743514718" >
         <def id="cn.sharesdk.ane.events:AddFriendEvent" /> 
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/events/AuthEvent" mod="1453970543000" signatureChecksum="289766592" >
-        <def id="cn.sharesdk.ane.events:AuthEvent" /> 
+      <script name="cn/sharesdk/ane/platform/Line" mod="1460025760000" signatureChecksum="2813599030" >
+        <def id="cn.sharesdk.ane.platform:Line" /> 
         <dep id="AS3" type="n" /> 
-        <dep id="flash.events:Event" type="i" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/events/GetFriendsListEvent" mod="1453970543000" signatureChecksum="4073755810" >
-        <def id="cn.sharesdk.ane.events:GetFriendsListEvent" /> 
+      <script name="cn/sharesdk/ane/platform/WechatMoments" mod="1460103784000" signatureChecksum="3663088357" >
+        <def id="cn.sharesdk.ane.platform:WechatMoments" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
         <dep id="AS3" type="n" /> 
-        <dep id="flash.events:Event" type="i" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/ShareType" mod="1453970543000" signatureChecksum="1570151226" >
-        <def id="cn.sharesdk.ane:ShareType" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="Object" type="i" /> 
-      </script>
-      <script name="cn/sharesdk/ane/events/ShareEvent" mod="1453970543000" signatureChecksum="241212798" >
-        <def id="cn.sharesdk.ane.events:ShareEvent" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.events:Event" type="i" /> 
-      </script>
-      <script name="cn/sharesdk/ane/PlatformID" mod="1454033155000" signatureChecksum="31059690" >
-        <def id="cn.sharesdk.ane:PlatformID" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="Object" type="i" /> 
-      </script>
-      <script name="cn/sharesdk/ane/NativeMethodName" mod="1453970543000" signatureChecksum="1764676911" >
-        <def id="cn.sharesdk.ane:NativeMethodName" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="Object" type="i" /> 
-      </script>
-      <script name="_637e48b23b5adc99ce8cfc4e92c65912ccea4356f9a03353126de70e5ea1b1be_flash_display_Sprite" mod="1454035961997" signatureChecksum="1443855281" >
-        <def id="_637e48b23b5adc99ce8cfc4e92c65912ccea4356f9a03353126de70e5ea1b1be_flash_display_Sprite" /> 
+      <script name="_42ef9ce802d37947a3aa61182b8b5caf499b59a6f07c261fa8ca3123e1d8f42d_flash_display_Sprite" mod="1460342117679" signatureChecksum="3457579765" >
+        <def id="_42ef9ce802d37947a3aa61182b8b5caf499b59a6f07c261fa8ca3123e1d8f42d_flash_display_Sprite" /> 
         <dep id="flash.system:Security" type="e" /> 
         <dep id="AS3" type="n" /> 
         <dep id="flash.display:Sprite" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/ShareSDKExtension" mod="1453970543000" signatureChecksum="1142615451" >
+      <script name="cn/sharesdk/ane/platform/Twitter" mod="1460103222000" signatureChecksum="952978347" >
+        <def id="cn.sharesdk.ane.platform:Twitter" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/FacebookMessenger" mod="1460025760000" signatureChecksum="1562650668" >
+        <def id="cn.sharesdk.ane.platform:FacebookMessenger" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/YiXin" mod="1460104153000" signatureChecksum="3583270817" >
+        <def id="cn.sharesdk.ane.platform:YiXin" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/events/AuthEvent" mod="1460025760000" signatureChecksum="289766592" >
+        <def id="cn.sharesdk.ane.events:AuthEvent" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:Event" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Douban" mod="1460087513000" signatureChecksum="681067957" >
+        <def id="cn.sharesdk.ane.platform:Douban" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/events/GetFriendsListEvent" mod="1460025760000" signatureChecksum="4073755810" >
+        <def id="cn.sharesdk.ane.events:GetFriendsListEvent" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:Event" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/ShareType" mod="1460025760000" signatureChecksum="1570151226" >
+        <def id="cn.sharesdk.ane:ShareType" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="Object" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/events/ShareEvent" mod="1460025760000" signatureChecksum="241212798" >
+        <def id="cn.sharesdk.ane.events:ShareEvent" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:Event" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/LinkedIn" mod="1460100342000" signatureChecksum="2173650838" >
+        <def id="cn.sharesdk.ane.platform:LinkedIn" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/WhatsApp" mod="1460025760000" signatureChecksum="2740527222" >
+        <def id="cn.sharesdk.ane.platform:WhatsApp" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Evernote" mod="1460099079000" signatureChecksum="207644411" >
+        <def id="cn.sharesdk.ane.platform:Evernote" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/PlatformID" mod="1460096717000" signatureChecksum="1908672528" >
+        <def id="cn.sharesdk.ane:PlatformID" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="Object" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Flickr" mod="1460099254000" signatureChecksum="4164306641" >
+        <def id="cn.sharesdk.ane.platform:Flickr" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/NativeMethodName" mod="1460025760000" signatureChecksum="3615021481" >
+        <def id="cn.sharesdk.ane:NativeMethodName" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="Object" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Facebook" mod="1460099121000" signatureChecksum="1817859941" >
+        <def id="cn.sharesdk.ane.platform:Facebook" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/SMS" mod="1460025760000" signatureChecksum="1763318796" >
+        <def id="cn.sharesdk.ane.platform:SMS" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Wechat" mod="1460103753000" signatureChecksum="3451537410" >
+        <def id="cn.sharesdk.ane.platform:Wechat" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/TencentWeibo" mod="1460101990000" signatureChecksum="2952808779" >
+        <def id="cn.sharesdk.ane.platform:TencentWeibo" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Pinterest" mod="1460100664000" signatureChecksum="669790375" >
+        <def id="cn.sharesdk.ane.platform:Pinterest" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/ShareSDKExtension" mod="1460100744000" signatureChecksum="2306146705" >
         <def id="cn.sharesdk.ane:ShareSDKExtension" /> 
         <dep id="JSON" type="e" /> 
         <dep id="cn.sharesdk.ane.events:GetFriendsListEvent" type="e" /> 
@@ -62,11 +187,13 @@
         <dep id="cn.sharesdk.ane.events:UserInfoEvent" type="e" /> 
         <dep id="cn.sharesdk.ane:NativeMethodName" type="e" /> 
         <dep id="cn.sharesdk.ane:Action" type="e" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
         <dep id="flash.events:StatusEvent" type="e" /> 
+        <dep id="cn.sharesdk.ane.events:ShareEvent" type="e" /> 
         <dep id="cn.sharesdk.ane.events:AddFriendEvent" type="e" /> 
         <dep id="flash.events:InvokeEvent" type="e" /> 
-        <dep id="cn.sharesdk.ane.events:ShareEvent" type="e" /> 
         <dep id="flash.events:Event" type="s" /> 
+        <dep id="cn.sharesdk.ane:ShareContent" type="s" /> 
         <dep id="cn.sharesdk.ane.events:GetFriendsListEvent" type="s" /> 
         <dep id="flash.events:StatusEvent" type="s" /> 
         <dep id="flash.external:ExtensionContext" type="s" /> 
@@ -79,23 +206,129 @@
         <dep id="flash.events:IEventDispatcher" type="i" /> 
         <dep id="Object" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/Action" mod="1453970543000" signatureChecksum="1328891940" >
+      <script name="cn/sharesdk/ane/platform/Renren" mod="1460101569000" signatureChecksum="2033012681" >
+        <def id="cn.sharesdk.ane.platform:Renren" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/Action" mod="1460025760000" signatureChecksum="1328891940" >
         <def id="cn.sharesdk.ane:Action" /> 
         <dep id="AS3" type="n" /> 
         <dep id="Object" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/ResponseState" mod="1453970543000" signatureChecksum="1949579838" >
+      <script name="cn/sharesdk/ane/platform/YiXinFav" mod="1460104177000" signatureChecksum="3892469950" >
+        <def id="cn.sharesdk.ane.platform:YiXinFav" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Instapaper" mod="1460099630000" signatureChecksum="2481406037" >
+        <def id="cn.sharesdk.ane.platform:Instapaper" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/QQ" mod="1460101024000" signatureChecksum="2684309744" >
+        <def id="cn.sharesdk.ane.platform:QQ" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/GooglePlus" mod="1460104970000" signatureChecksum="1916747843" >
+        <def id="cn.sharesdk.ane.platform:GooglePlus" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/ResponseState" mod="1460025760000" signatureChecksum="1949579838" >
         <def id="cn.sharesdk.ane:ResponseState" /> 
         <dep id="AS3" type="n" /> 
         <dep id="Object" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/events/UserInfoEvent" mod="1453970543000" signatureChecksum="4154232810" >
+      <script name="cn/sharesdk/ane/platform/WechatFavorites" mod="1460103785000" signatureChecksum="1922911157" >
+        <def id="cn.sharesdk.ane.platform:WechatFavorites" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Alipay" mod="1460087233000" signatureChecksum="39923211" >
+        <def id="cn.sharesdk.ane.platform:Alipay" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/YiXinMoments" mod="1460104175000" signatureChecksum="2309186180" >
+        <def id="cn.sharesdk.ane.platform:YiXinMoments" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/MingDao" mod="1460100558000" signatureChecksum="904218403" >
+        <def id="cn.sharesdk.ane.platform:MingDao" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Mail" mod="1460025760000" signatureChecksum="2804030764" >
+        <def id="cn.sharesdk.ane.platform:Mail" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Dropbox" mod="1460089726000" signatureChecksum="1306871650" >
+        <def id="cn.sharesdk.ane.platform:Dropbox" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/SinaWeibo" mod="1460101879000" signatureChecksum="2067423783" >
+        <def id="cn.sharesdk.ane.platform:SinaWeibo" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Pocket" mod="1460100927000" signatureChecksum="758008002" >
+        <def id="cn.sharesdk.ane.platform:Pocket" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/VKontakte" mod="1460103638000" signatureChecksum="4269558220" >
+        <def id="cn.sharesdk.ane.platform:VKontakte" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/KakaoStory" mod="1460100136000" signatureChecksum="260527188" >
+        <def id="cn.sharesdk.ane.platform:KakaoStory" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Instagram" mod="1460099522000" signatureChecksum="1208044074" >
+        <def id="cn.sharesdk.ane.platform:Instagram" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/events/UserInfoEvent" mod="1460025760000" signatureChecksum="4154232810" >
         <def id="cn.sharesdk.ane.events:UserInfoEvent" /> 
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
+      <script name="cn/sharesdk/ane/ShareContent" mod="1460341995000" signatureChecksum="3583389057" >
+        <def id="cn.sharesdk.ane:ShareContent" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="Object" type="i" /> 
+      </script>
+      <script name="cn/sharesdk/ane/platform/Youdao" mod="1460104536000" signatureChecksum="3600766661" >
+        <def id="cn.sharesdk.ane.platform:Youdao" /> 
+        <dep id="flash.system:Capabilities" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="6890d9ae0c9a2b6b203af32c94e47316ba7dd5c307011f5e80d2d09232a4920c"   />
+        <digest type="SHA-256" signed="false" value="7bb1ddadf30b49a01c91e19f620e31f2d54366e29c03ff9360d0a14b242188cc"   />
       </digests>
     </library>
   </libraries>

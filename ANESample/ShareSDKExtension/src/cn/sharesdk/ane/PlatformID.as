@@ -43,9 +43,11 @@ package cn.sharesdk.ane {
 		public static const Bluetooth:int = 48;			//Bluetooth 
 		public static const AliPay:int = 50;		    //AliPay Social 
 		
-		public static const KakaoSeries:int = 995;      //Kakao series    *（iOS only, including KakaoTalk,KakaoStory）*
-		public static const WechatSeries:int = 997;		//wechat series   *（iOS only, including WeChatSession,WeChatTimeline,WeChatFav）*
-		public static const QQSeries:int = 998;			//QQ series		  *（iOS only, including QQ,QZone）*
+		public static const YixinSeries:int = 994;      		//Yixin series    *（iOS only, including Yixin,YinxinMonents,YinxinFavorites）*
+		public static const KakaoSeries:int = 995;      		//Kakao series    *（iOS only, including KakaoTalk,KakaoStory）*
+		public static const EvernoteInternational:int = 996;	//Evernote International version *（iOS only）*
+		public static const WechatSeries:int = 997;				//wechat series   *（iOS only, including WeChatSession,WeChatTimeline,WeChatFav）*
+		public static const QQSeries:int = 998;					//QQ series		  *（iOS only, including QQ,QZone）*
 	}
 	
 }

@@ -20,6 +20,9 @@ package
 	import cn.sharesdk.ane.platform.Twitter;
 	import cn.sharesdk.ane.platform.Wechat;
 	import cn.sharesdk.ane.platform.WechatMoments;
+	import cn.sharesdk.ane.platform.Douban;
+	
+	import cn.sharesdk.ane.ShareType;
 	
 	public class ANEDemo extends Sprite
 	{
@@ -42,6 +45,7 @@ package
 			sinaConf.setAppKey("568898243");
 			sinaConf.setAppSecret("38a4f8204cc784f81f9f0daaf31e02e3");
 			sinaConf.setRedirectUrl("http://www.sharesdk.cn");
+			sinaConf.setAuthType("both");
 			totalConf[PlatformID.SinaWeibo] = sinaConf.getPlatformConf();
 			
 			var tencentConf:TencentWeibo = new TencentWeibo();
@@ -58,6 +62,7 @@ package
 			var wechatMomentsConf:WechatMoments = new WechatMoments();
 			wechatMomentsConf.setAppId("wx4868b35061f87885");
 			wechatMomentsConf.setAppSecret("64020361b8ec4c99936c0e3999a9f249");	
+			
 			totalConf[PlatformID.WeChatMoments] = wechatMomentsConf.getPlatformConf();
 								
 			var qqConf:QQ = new QQ();
@@ -74,11 +79,13 @@ package
 			renrenConf.setAppId("226427");
 			renrenConf.setApiKey("fc5b8aed373c4c27a05b712acba0f8c3");
 			renrenConf.setSecretKey("f29df781abdd4f49beca5a2194676ca4");
+			renrenConf.setAuthType("both");
 			totalConf[PlatformID.Renren] = renrenConf.getPlatformConf();
 					
 			var facebookConf:Facebook = new Facebook();
 			facebookConf.setConsumerKey("107704292745179");
 			facebookConf.setConsumerSecret("38053202e1a5fe26c80c753071f0b573");
+			facebookConf.setAuthType("both");
 			totalConf[PlatformID.Facebook] = facebookConf.getPlatformConf();
 			
 			var twitterConf:Twitter = new Twitter();
@@ -86,6 +93,12 @@ package
 			twitterConf.setConsumerSecret("gbeWsZvA9ELJSdoBzJ5oLKX0TU09UOwrzdGfo9Tg7DjyGuMe8G");
 			twitterConf.setCallbackUrl("http://mob.com");
 			totalConf[PlatformID.Twitter] = twitterConf.getPlatformConf();
+			
+			var doubanConf:Douban = new Douban();
+			doubanConf.setApiKey("02e2cbe5ca06de5908a863b15e149b0b");
+			doubanConf.setSecret("9f1e7b4f71304f2f");
+			doubanConf.setRedirectUri("http://www.sharesdk.cn");
+			totalConf[PlatformID.Douban] = doubanConf.getPlatformConf();
 			
 			shareSDK.initSDK("6c7d91b85e4b");  
 			shareSDK.setPlatformConfig(totalConf);
@@ -223,7 +236,7 @@ package
 		
 		private function onAuthorizeHandler(event:MouseEvent):int
 		{
-			return shareSDK.authorize(PlatformID.SinaWeibo);
+			return shareSDK.authorize(PlatformID.WechatSeries);
 		}
 		
 		private function onCancelAuthHandler(event:MouseEvent):void
@@ -254,6 +267,7 @@ package
 			shareParams.setText("这是分享的Text");
 			shareParams.setTitle("ShareSDK for ANE发布");
 			shareParams.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");	
+			
 			return shareSDK.shareContent(PlatformID.SinaWeibo, shareParams);
 		}
 		
@@ -265,15 +279,25 @@ package
 			shareParams.setText("ShareSDK 3.0 for ANE Text");
 			shareParams.setTitle("ShareSDK 3.0 for ANE Title");
 			shareParams.setUrl("http://mob.com");
-			shareParams.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+			shareParams.setImagePath("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+			shareParams.setShareType(ShareType.SSDKContentTypeImage)
 			
 			//定制指定平台的分享内容
 			var twParams:ShareContent = new ShareContent();
 			twParams.setText("ANE TencentWeibo Text");
 			twParams.setTitle("ANE TencentWeibo Title");
 			twParams.setUrl("http://mob.com");
-			
-			shareParams.setShareContentCustomize(PlatformID.TencentWeibo, twParams);			
+			twParams.setImageUrl("http://www.zsnews.cn/data/photo/Backup/2008/04/21/tn_200842116444313993.jpg");
+			twParams.setShareType(ShareType.SSDKContentTypeImage)
+			shareParams.setShareContentCustomize(PlatformID.TencentWeibo, twParams);
+				
+			var sinaParams:ShareContent = new ShareContent();
+			sinaParams.setText("SinaWeibo Text");
+			var file:File = File.applicationDirectory.resolvePath("mac.jpeg");
+			sinaParams.setImagePath(file.nativePath);
+			sinaParams.setShareType(ShareType.SSDKContentTypeImage)
+			shareParams.setShareContentCustomize(PlatformID.SinaWeibo, sinaParams);
+					
 			return shareSDK.showPlatformList(null, shareParams, 320, 460);
 		}
 		
