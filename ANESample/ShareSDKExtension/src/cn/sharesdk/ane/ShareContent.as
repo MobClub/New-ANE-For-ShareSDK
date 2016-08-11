@@ -287,9 +287,9 @@ package cn.sharesdk.ane {
 		}
 		
 		/*iOS Only - Pinterst*/
-		public function setBoardID(boardId:String):void
+		public function setBoard(board:String):void
 		{
-			shareParams["boardID"] = boardId;
+			shareParams["board"] = board;
 		}
 		
 		/*iOS Only - WhatsApp/Instagram*/

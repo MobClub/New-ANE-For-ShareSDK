@@ -4,7 +4,7 @@ This is the new version and new sample of ShareSDK for ANE.
 
 supported original ShareSDK version:
 
-- iOS - v3.2.1 
+- iOS - v3.4.0 
 - Android - V2.7.1
 
 

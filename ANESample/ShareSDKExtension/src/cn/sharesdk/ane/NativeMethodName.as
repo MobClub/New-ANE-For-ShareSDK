@@ -73,6 +73,11 @@ package cn.sharesdk.ane
 		public static const GET_AUTH_INFO:String = "getAuthInfo";
 		
 		/**
+		 * 通过配置文件分享
+		 */	
+		public static const SHARE_WITH_CONTENT_NAME:String = "ShareWithContentName";
+		
+		/**
 		 * 是否开启SSO授权
 		 */
 		public static const DISABLE_SSO:String = "disableSSO";		

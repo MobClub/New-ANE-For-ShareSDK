@@ -7,6 +7,7 @@ package cn.sharesdk.ane
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
 	import flash.system.Capabilities;
+	
 	import cn.sharesdk.ane.events.AddFriendEvent;
 	import cn.sharesdk.ane.events.AuthEvent;
 	import cn.sharesdk.ane.events.GetFriendsListEvent;
@@ -362,6 +363,20 @@ package cn.sharesdk.ane
 			}
 			params.reqID = reqID;
 			apiCaller(NativeMethodName.SHOW_SHARE_CONTENT_EDITOR, params);
+			return reqID;
+		}
+		
+		public function shareWithContentName(platform:int, contentName:String, customFields:Object):int
+		{
+			reqID ++;
+			var params:Object = new Object();
+			params.platform = platform;
+			params.contentName = contentName;
+			if (customFields != null) {
+				params.customFields = customFields;
+			}
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.SHARE_WITH_CONTENT_NAME, params);
 			return reqID;
 		}
 		

@@ -1,14 +1,15 @@
-<platform xmlns="http://ns.adobe.com/air/extension/17.0">
+<platform xmlns="http://ns.adobe.com/air/extension/20.0">
     <description >ShareSDK Extension</description>
     <copyright>ShareSDK 2014 (optional)</copyright>
     <sdkVersion>7.0</sdkVersion>
     <linkerOptions>
         <option>-w</option>
-        <option>-ios_version_min 6.0</option>
+        <option>-ios_version_min 7.0</option>
         <option>-licucore</option>
         <option>-lstdc++</option>
         <option>-lz</option>
         <option>-lsqlite3</option>
+        <option>-ObjC</option>
         <option>-framework Foundation</option>
         <option>-framework JavaScriptCore</option>
         <option>-framework ImageIO</option>

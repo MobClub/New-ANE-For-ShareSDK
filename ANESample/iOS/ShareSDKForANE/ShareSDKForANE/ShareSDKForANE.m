@@ -21,7 +21,7 @@
 #import <MOBFoundation/MOBFDevice.h>
 #import "ShareSDKWindow.h"
 
-#define __SHARESDK_SINA_WEIBO__
+//#define __SHARESDK_SINA_WEIBO__
 #define __SHARESDK_WECHAT__
 #define __SHARESDK_QQ__
 #define __SHARESDK_APSOCIAL__
@@ -255,8 +255,6 @@ void setWechatShareParmas(NSDictionary *wechatDic,NSMutableDictionary *params,SS
                          sourceFileData:sourceFileData
                                    type:type
                      forPlatformSubType:subType];
-    
-
 }
 
 /**
@@ -318,8 +316,6 @@ void setQQShareParmas(NSDictionary *qqDic,NSMutableDictionary *params,SSDKPlatfo
  */
 void setYiXinShareParmas(NSDictionary *yiXinDic,NSMutableDictionary *params,SSDKPlatformType subType)
 {
-    
-    
     NSString *text = nil;
     NSString *title = nil;
     NSString *url = nil;
@@ -331,7 +327,6 @@ void setYiXinShareParmas(NSDictionary *yiXinDic,NSMutableDictionary *params,SSDK
     NSString *comment = nil;
     NSString *toUserId = nil;
     SSDKContentType type = SSDKContentTypeText;
-    
     
     if ([[yiXinDic objectForKey:@"text"] isKindOfClass:[NSString class]])
     {
@@ -432,7 +427,7 @@ void setKakaoShareParmas(NSDictionary *kakaoDic,NSMutableDictionary *params,SSDK
         SSDKImage *image = nil;
         if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                 options:MOBFRegexOptionsNoOptions
-                                inRange:NSMakeRange(0, 10)
+                                inRange:NSMakeRange(0, imagePath.length)
                              withString:imagePath])
         {
             image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -453,7 +448,6 @@ void setKakaoShareParmas(NSDictionary *kakaoDic,NSMutableDictionary *params,SSDK
         {
             NSLog(@"#waring : 检测不到有效图片路径,请检查传入图片的路径的有效性");
         }
-        
     }
     else if([[kakaoDic objectForKey:@"imageUrl"] isKindOfClass:[NSArray class]])
     {
@@ -463,7 +457,7 @@ void setKakaoShareParmas(NSDictionary *kakaoDic,NSMutableDictionary *params,SSDK
             SSDKImage *image = nil;
             if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                     options:MOBFRegexOptionsNoOptions
-                                    inRange:NSMakeRange(0, 10)
+                                    inRange:NSMakeRange(0, imagePath.length)
                                  withString:imagePath])
             {
                 image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -569,9 +563,6 @@ void setKakaoShareParmas(NSDictionary *kakaoDic,NSMutableDictionary *params,SSDK
                                   type:type
                     forPlatformSubType:subType];
 }
-
-
-
 
 NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
 {
@@ -790,7 +781,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -977,6 +968,10 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             NSDictionary *customDict = [customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeFacebook]];
             NSString *text = nil;
             NSString *image = nil;
+            NSString *title = nil;
+            NSString *urlDesc = nil;
+            NSString *url = nil;
+            NSString *attachementUrl = nil;
             SSDKContentType type = SSDKContentTypeText;
             
             if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
@@ -987,12 +982,32 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             {
                 image = [customDict objectForKey:@"imageUrl"];
             }
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            {
+                url = [customDict objectForKey:@"url"];
+            }
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            {
+                title = [customDict objectForKey:@"title"];
+            }
+            if ([[customDict objectForKey:@"urlDesc"] isKindOfClass:[NSString class]])
+            {
+                urlDesc = [customDict objectForKey:@"urlDesc"];
+            }
+            if ([[customDict objectForKey:@"attachmentPath"] isKindOfClass:[NSString class]])
+            {
+                attachementUrl = [customDict objectForKey:@"attachmentPath"];
+            }
             if ([[customDict objectForKey:@"shareType"] isKindOfClass:[NSNumber class]])
             {
                 type = [[customDict objectForKey:@"shareType"] integerValue];
             }
             [params SSDKSetupFacebookParamsByText:text
                                             image:image
+                                              url:[NSURL URLWithString:url]
+                                         urlTitle:title
+                                          urlName:urlDesc
+                                   attachementUrl:[NSURL URLWithString:attachementUrl]
                                              type:type];
         }
         
@@ -1016,7 +1031,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1047,7 +1062,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1110,7 +1125,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1140,7 +1155,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1230,7 +1245,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1375,7 +1390,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1408,7 +1423,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1518,7 +1533,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1548,7 +1563,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1626,7 +1641,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1658,7 +1673,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1805,7 +1820,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1835,7 +1850,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -1886,7 +1901,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
         {
             NSString *decs = nil;
             NSString *url = nil;
-            NSString *boardId = nil;
+            NSString *board = nil;
             NSString *image = nil;
             
             NSDictionary *customDict = [customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypePinterest]];
@@ -1899,18 +1914,19 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             {
                 url = [customDict objectForKey:@"url"];
             }
-            if ([[customDict objectForKey:@"boardID"] isKindOfClass:[NSString class]])
+            if ([[customDict objectForKey:@"board"] isKindOfClass:[NSString class]])
             {
-                boardId = [customDict objectForKey:@"boardID"];
+                board = [customDict objectForKey:@"board"];
             }
             if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
             {
                 image = [customDict objectForKey:@"imageUrl"];
             }
+
             [params SSDKSetupPinterestParamsByImage:image
                                                desc:decs
                                                 url:[NSURL URLWithString:url]
-                                            boardId:boardId];
+                                          boardName:board];
         }
         
         //Flickr
@@ -2024,7 +2040,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                SSDKImage *image = nil;
                if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                        options:MOBFRegexOptionsNoOptions
-                                       inRange:NSMakeRange(0, 10)
+                                       inRange:NSMakeRange(0, imagePath.length)
                                     withString:imagePath])
                {
                    image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -2057,7 +2073,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                    SSDKImage *image = nil;
                    if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                            options:MOBFRegexOptionsNoOptions
-                                           inRange:NSMakeRange(0, 10)
+                                           inRange:NSMakeRange(0, imagePath.length)
                                         withString:imagePath])
                    {
                        image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -2389,7 +2405,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -2420,7 +2436,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -2553,7 +2569,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                 SSDKImage *image = nil;
                 if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                         options:MOBFRegexOptionsNoOptions
-                                        inRange:NSMakeRange(0, 10)
+                                        inRange:NSMakeRange(0, imagePath.length)
                                      withString:imagePath])
                 {
                     image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -2582,7 +2598,7 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
                     SSDKImage *image = nil;
                     if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                             options:MOBFRegexOptionsNoOptions
-                                            inRange:NSMakeRange(0, 10)
+                                            inRange:NSMakeRange(0, imagePath.length)
                                          withString:imagePath])
                     {
                         image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imagePath]];
@@ -3042,7 +3058,6 @@ void ShareSDKShare (FREContext ctx, NSDictionary *params)
                  break;
          }
 
-         
          NSString *dataStr = [MOBFJson jsonStringFromObject:data];
          
          FREDispatchStatusEventAsync(ctx,
@@ -3141,7 +3156,93 @@ void ShareSDKOneKeyShare (FREContext ctx, NSDictionary *params)
 
                  }];
     
+}
+
+void ShareSDKShareWithContentName (FREContext ctx, NSDictionary *params)
+{
+    NSUInteger reqId;
+    SSDKPlatformType platType = SSDKPlatformTypeAny;
+    NSString *contentName = @"";
+    NSDictionary *customFields = nil;
+    
+    if ([[params objectForKey:@"reqId"] isKindOfClass:[NSNumber class]])
+    {
+        reqId = [[params objectForKey:@"reqId"] unsignedIntegerValue];
     }
+    if ([params objectForKey:@"contentName"])
+    {
+        contentName = [params objectForKey:@"contentName"];
+    }
+    if ([[params objectForKey:@"platform"] isKindOfClass:[NSNumber class]])
+    {
+        platType = (SSDKPlatformType)[[params objectForKey:@"platform"] integerValue];
+    }
+    if ([[params objectForKey:@"customFields"] isKindOfClass:[NSDictionary class]])
+    {
+        customFields = [params objectForKey:@"customFields"];
+    }
+    
+    [ShareSDK shareWithContentName:contentName
+                          platform:platType
+                      customFields:customFields
+                    onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+                       
+                        NSString *code = @"SSDK_PA";
+                        
+                        NSMutableDictionary *resDict = [NSMutableDictionary dictionary];
+                        
+                        NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                     [NSNumber numberWithInteger:9],
+                                                     @"action",
+                                                     [NSNumber numberWithInteger:state] ,
+                                                     @"status",
+                                                     [NSNumber numberWithInteger:platType],
+                                                     @"platform",
+                                                     [NSNumber numberWithUnsignedInteger:reqId],
+                                                     @"reqId",
+                                                     resDict,
+                                                     @"res",
+                                                     nil];
+                        
+                        
+                        switch (state)
+                        {
+                            case SSDKResponseStateSuccess:
+                            {
+                                if ([contentEntity rawData])
+                                {
+                                    [resDict setObject:[NSNumber numberWithBool:YES] forKey:@"end"];
+                                    [resDict setObject:[contentEntity rawData] forKey:@"data"];
+                                    
+                                }
+                                break;
+                            }
+                            case SSDKResponseStateFail:
+                            {
+                                NSMutableDictionary *errDict = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInteger:[error code]] forKey:@"error_code"];
+                                
+                                if ([[error userInfo] objectForKey:@"error_msg"])
+                                {
+                                    [errDict setObject:[[error userInfo] objectForKey:@"error_msg"] forKey:@"error_msg"];
+                                }
+                                [resDict setObject:errDict forKey:@"error"];
+                                [resDict setObject:[NSNumber numberWithBool:YES] forKey:@"end"];
+                                
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                        
+                        NSString *dataStr = [MOBFJson jsonStringFromObject:data];
+                        
+                        FREDispatchStatusEventAsync(ctx,
+                                                    (uint8_t *)[code cStringUsingEncoding:NSUTF8StringEncoding],
+                                                    (uint8_t *)[dataStr cStringUsingEncoding:NSUTF8StringEncoding]);
+
+                    }];
+    
+}
 
 void ShareSDKShowShareMenu (FREContext ctx, NSDictionary *params)
 {
@@ -3188,7 +3289,6 @@ void ShareSDKShowShareMenu (FREContext ctx, NSDictionary *params)
         {
             y = [[params objectForKey:@"y"] integerValue];
         }
-        
         if ([MOBFDevice isPad])
         {
             if (!_refView)
@@ -3199,9 +3299,6 @@ void ShareSDKShowShareMenu (FREContext ctx, NSDictionary *params)
             [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:_refView];
             
         }
-        
-        
-        
         
         [ShareSDK showShareActionSheet:_refView
                                  items:platTypes
@@ -3270,11 +3367,13 @@ void ShareSDKShowShareMenu (FREContext ctx, NSDictionary *params)
     }
     @catch (NSException *exception) {
         
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:[exception reason] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:[exception reason]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
         [alertView show];
     }
-
-    
 }
 
 void ShareSDKShowShareView (FREContext ctx, NSDictionary *params)
@@ -3343,7 +3442,6 @@ void ShareSDKShowShareView (FREContext ctx, NSDictionary *params)
               }
               
               NSString *dataStr = [MOBFJson jsonStringFromObject:data];
-              
               
               //派发事件
               FREDispatchStatusEventAsync(ctx,
@@ -3506,7 +3604,6 @@ void ShareSDKAddFriend (FREContext ctx, NSDictionary *params)
                                           @"reqId",
                                           nil];
 
-             
              switch (state)
              {
                  case SSDKResponseStateSuccess:
@@ -3539,13 +3636,10 @@ void ShareSDKAddFriend (FREContext ctx, NSDictionary *params)
                      break;
              }
              
-             
              NSString *dataStr = [MOBFJson jsonStringFromObject:data];
-             
              FREDispatchStatusEventAsync(ctx,
                                          (uint8_t *)[code cStringUsingEncoding:NSUTF8StringEncoding],
                                          (uint8_t *)[dataStr cStringUsingEncoding:NSUTF8StringEncoding]);
-
              
          }];
     
@@ -3712,7 +3806,10 @@ FREObject ShareSDKCallMethod (FREContext ctx, void* functionData, uint32_t argc,
             {
                  ShareSDKGetFriendsList(ctx, [paramDict objectForKey:@"params"]);
             }
-
+            else if ([action isEqualToString:@"ShareWithContentName"])
+            {
+                ShareSDKShareWithContentName(ctx, [paramDict objectForKey:@"params"]);
+            }
         }
     }
     
