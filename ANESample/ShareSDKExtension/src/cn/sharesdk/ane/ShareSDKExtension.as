@@ -366,6 +366,7 @@ package cn.sharesdk.ane
 			return reqID;
 		}
 		
+		//根据配置文件进行分享(iOS Only)
 		public function shareWithContentName(platform:int, contentName:String, customFields:Object):int
 		{
 			reqID ++;
@@ -377,6 +378,39 @@ package cn.sharesdk.ane
 			}
 			params.reqID = reqID;
 			apiCaller(NativeMethodName.SHARE_WITH_CONTENT_NAME, params);
+			return reqID;
+		}
+		
+		//根据配置文件调出编辑界面进行分享(iOS Only)
+		public function showShareContentEditorByContentName(platform:int, contentName:String, customFields:Object):int
+		{
+			reqID ++;
+			var params:Object = new Object();
+			params.platform = platform;
+			params.contentName = contentName;
+			if (customFields != null) {
+				params.customFields = customFields;
+			}
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.SHOW_SHARE_CONTENT_EDITOR_BY_CONTENT_NAME, params);
+			return reqID;		
+		}
+		
+		//根据配置文件调出分享菜单进行分享(iOS Only)
+		public function showPlatformListByContentName(contentName:String, customFields:Object, platforms:Array = null,  x:Number = 0, y:Number = 0):int
+		{
+				
+			reqID ++;
+			var params:Object = new Object();
+			params.platforms = platforms;
+			params.contentName = contentName;
+			if (customFields != null) {
+				params.customFields = customFields;
+			}
+			params.x = x;
+			params.y = y;
+			params.reqID = reqID;
+			apiCaller(NativeMethodName.SHOW_PLATFORM_LIST_BY_CONTENT_NAME, params);
 			return reqID;
 		}
 		

@@ -10,16 +10,18 @@
 #import "FlashRuntimeExtensions.h"
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDK/ShareSDK+Base.h>
-#import <ShareSDK/SSDKFriendsPaging.h>
+#import <ShareSDKExtension/SSDKFriendsPaging.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
 #import <ShareSDKExtension/ShareSDK+Extension.h>
 #import <ShareSDKExtension/SSEShareHelper.h>
 #import <ShareSDKConnector/ShareSDKConnector.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
+#import <ShareSDKConfigFile/ShareSDK+XML.h>
 #import <MOBFoundation/MOBFRegex.h>
 #import <MOBFoundation/MOBFJson.h>
 #import <MOBFoundation/MOBFDevice.h>
 #import "ShareSDKWindow.h"
+
 
 //#define __SHARESDK_SINA_WEIBO__
 #define __SHARESDK_WECHAT__
@@ -3453,8 +3455,228 @@ void ShareSDKShowShareView (FREContext ctx, NSDictionary *params)
     
 }
 
+void ShareSDKShowShareMenuByContentName (FREContext ctx, NSDictionary *params)
+{
 
+    @try {
+        NSInteger x = 0;
+        NSInteger y = 0;
+        NSUInteger reqId;
+        NSString *contentName;
+        NSDictionary *customFields = nil;
+        NSMutableArray *platTypes = [NSMutableArray array];
+        
+        if ([[params objectForKey:@"platforms"] isKindOfClass:[NSArray class]])
+        {
+            NSArray *customItems = [params objectForKey:@"platforms"];
+            
+            [customItems enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                [platTypes addObject:[NSNumber numberWithInteger:[obj integerValue]]];
+                
+            }];
+            
+        }
+        else
+        {
+            [[ShareSDK activePlatforms] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                [platTypes addObject:[NSNumber numberWithInteger:[obj integerValue]]];
+            }];
+        }
+        if ([[params objectForKey:@"reqId"] isKindOfClass:[NSNumber class]])
+        {
+            reqId = [[params objectForKey:@"reqId"] unsignedIntegerValue];
+        }
+        if ([[params objectForKey:@"x"] isKindOfClass:[NSNumber class]])
+        {
+            x = [[params objectForKey:@"x"] integerValue];
+        }
+        if ([[params objectForKey:@"y"] isKindOfClass:[NSNumber class]])
+        {
+            y = [[params objectForKey:@"y"] integerValue];
+        }
+        if ([params objectForKey:@"contentName"])
+        {
+            contentName = [params objectForKey:@"contentName"];
+        }
+        if ([[params objectForKey:@"customFields"] isKindOfClass:[NSDictionary class]])
+        {
+            customFields = [params objectForKey:@"customFields"];
+        }
+        if ([MOBFDevice isPad])
+        {
+            if (!_refView)
+            {
+                _refView = [[UIView alloc] initWithFrame:CGRectMake(x, y, 10, 10)];
+            }
+            
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:_refView];
+        }
+        
+        [ShareSDK showShareActionSheet:_refView
+                                 items:platTypes
+                           contentName:contentName
+                          customFields:customFields
+                   onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+                       
+                       NSString *code = @"SSDK_PA";
+                       
+                       NSMutableDictionary *resDict = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithBool:end]
+                                                                                         forKey:@"end"];
+                       
+                       NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                    [NSNumber numberWithInteger:9],
+                                                    @"action",
+                                                    [NSNumber numberWithInteger:state],
+                                                    @"status",
+                                                    [NSNumber numberWithInteger:platformType],
+                                                    @"platform",
+                                                    [NSNumber numberWithUnsignedInteger:reqId],
+                                                    @"reqId",
+                                                    resDict,
+                                                    @"res",
+                                                    nil];
+                       
+                       switch (state)
+                       {
+                           case SSDKResponseStateSuccess:
+                           {
+                               if ([contentEntity rawData])
+                               {
+                                   [resDict setObject:[contentEntity rawData] forKey:@"data"];
+                               }
+                               
+                               break;
+                           }
+                           case SSDKResponseStateFail:
+                           {
+                               NSMutableDictionary *err = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInteger:[error code]] forKey:@"error_code"];
+                               if ([[error userInfo] objectForKey:@"error_message"])
+                               {
+                                   [err setObject:[[error userInfo] objectForKey:@"error_message"] forKey:@"error_msg"];
+                               }
+                               [resDict setObject:err forKey:@"error"];
+                               
+                               break;
+                           }
+                           default:
+                               break;
+                       }
+                       
+                       NSString *dataStr = [MOBFJson jsonStringFromObject:data];
+                       
+                       //派发事件
+                       FREDispatchStatusEventAsync(ctx,
+                                                   (uint8_t *)[code cStringUsingEncoding:NSUTF8StringEncoding],
+                                                   (uint8_t *)[dataStr cStringUsingEncoding:NSUTF8StringEncoding]);
+                       
+                       if (_refView)
+                       {
+                           //移除视图
+                           [_refView removeFromSuperview];
+                       }
 
+                   }];
+        
+    } @catch (NSException *exception) {
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:[exception reason]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+}
+
+void ShareSDKShowShareViewByContentName (FREContext ctx, NSDictionary *params)
+{
+    NSUInteger reqId;
+    NSString *contentName;
+    NSDictionary *customFields = nil;
+    SSDKPlatformType platType = SSDKPlatformTypeAny;
+    if ([[params objectForKey:@"platform"] isKindOfClass:[NSNumber class]])
+    {
+        platType = (SSDKPlatformType)[[params objectForKey:@"platform"] integerValue];
+    }
+    if ([[params objectForKey:@"reqId"] isKindOfClass:[NSNumber class]])
+    {
+        reqId = [[params objectForKey:@"reqId"] unsignedIntegerValue];
+    }
+    if ([params objectForKey:@"contentName"])
+    {
+        contentName = [params objectForKey:@"contentName"];
+    }
+    if ([[params objectForKey:@"customFields"] isKindOfClass:[NSDictionary class]])
+    {
+        customFields = [params objectForKey:@"customFields"];
+    }
+    
+    [ShareSDK showShareEditor:platType
+           otherPlatformTypes:nil
+                  contentName:contentName
+                 customFields:customFields
+          onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+             
+              
+              NSString *code = @"SSDK_PA";
+              
+              NSMutableDictionary *resDict = [NSMutableDictionary dictionary];
+              
+              NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithInteger:9],
+                                           @"action",
+                                           [NSNumber numberWithInteger:state] ,
+                                           @"status",
+                                           [NSNumber numberWithInteger:platType],
+                                           @"platform",
+                                           [NSNumber numberWithUnsignedInteger:reqId],
+                                           @"reqId",
+                                           resDict,
+                                           @"res",
+                                           nil];
+              
+              
+              switch (state)
+              {
+                  case SSDKResponseStateSuccess:
+                  {
+                      if ([contentEntity rawData])
+                      {
+                          [resDict setObject:[NSNumber numberWithBool:YES] forKey:@"end"];
+                          [resDict setObject:[contentEntity rawData] forKey:@"data"];
+                          
+                      }
+                      break;
+                  }
+                  case SSDKResponseStateFail:
+                  {
+                      NSMutableDictionary *errDict = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInteger:[error code]] forKey:@"error_code"];
+                      
+                      if ([[error userInfo] objectForKey:@"error_msg"])
+                      {
+                          [errDict setObject:[[error userInfo] objectForKey:@"error_msg"] forKey:@"error_msg"];
+                      }
+                      [resDict setObject:errDict forKey:@"error"];
+                      [resDict setObject:[NSNumber numberWithBool:YES] forKey:@"end"];
+                      
+                      break;
+                  }
+                  default:
+                      break;
+              }
+              
+              NSString *dataStr = [MOBFJson jsonStringFromObject:data];
+              
+              FREDispatchStatusEventAsync(ctx,
+                                          (uint8_t *)[code cStringUsingEncoding:NSUTF8StringEncoding],
+                                          (uint8_t *)[dataStr cStringUsingEncoding:NSUTF8StringEncoding]);
+
+          }];
+    
+}
 
 void ShareSDKToast (NSDictionary *params)
 {
@@ -3781,6 +4003,14 @@ FREObject ShareSDKCallMethod (FREContext ctx, void* functionData, uint32_t argc,
             else if ([action isEqualToString:@"ShowShareContentEditor"])
             {
                 ShareSDKShowShareView (ctx, [paramDict objectForKey:@"params"]);
+            }
+            else if ([action isEqualToString:@"ShowPlatformListByContentName"])
+            {
+                ShareSDKShowShareMenuByContentName(ctx, [paramDict objectForKey:@"params"]);
+            }
+            else if ([action isEqualToString:@"ShowShareContentEditorByContentName"])
+            {
+                ShareSDKShowShareViewByContentName(ctx, [paramDict objectForKey:@"params"]);
             }
             else if ([action isEqualToString:@"toast"])
             {

@@ -16,13 +16,38 @@
     </linkerOptions>
     
     <packagedDependencies>
+        <!-- 必要库 -->
         <packagedDependency>ShareSDK/ShareSDK.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/Required/MOBFoundation.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/Required/ShareSDKConnector.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/Optional/ShareSDKExtension.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/Optional/ShareSDKConfigFile.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/Optional/ShareSDKUI.framework</packagedDependency>
+        
+        <!-- 平台连接器,不需要的平台可以去掉-->
+        <packagedDependency>ShareSDK/Support/PlatformConnector/AliPayConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/CopyConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/EvernoteConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/FacebookConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/GooglePlusConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/InstagramConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/InstapaperConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/KakaoConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/LineConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/MailConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/PrintConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/QQConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/RenrenConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/SinaWeiboConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/SMSConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/WechatConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/WhatsAppConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/YiXinConnector.framework</packagedDependency>
+         
+        <!-- 第三方平台framwork的路径,不需要的可以删除-->
         <packagedDependency>ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenAPI.framework</packagedDependency>
-         <packagedDependency>ShareSDK/Support/PlatformSDK/FacebookMessengerSDK/FBSDKMessengerShareKit.framework</packagedDependency>
-         <packagedDependency>ShareSDK/Support/PlatformSDK/RenRenSDK/RennSDK.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformSDK/FacebookMessengerSDK/FBSDKMessengerShareKit.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformSDK/RenRenSDK/RennSDK.framework</packagedDependency>
+         
     </packagedDependencies>
 </platform>

@@ -78,6 +78,16 @@ package cn.sharesdk.ane
 		public static const SHARE_WITH_CONTENT_NAME:String = "ShareWithContentName";
 		
 		/**
+		 * 通过配置文件调出编辑框进行分享
+		 */	
+		public static const SHOW_SHARE_CONTENT_EDITOR_BY_CONTENT_NAME:String = "ShowShareContentEditorByContentName";
+		
+		/**
+		 * 通过配置文件调出分享菜单进行分享
+		 */	
+		public static const SHOW_PLATFORM_LIST_BY_CONTENT_NAME:String = "ShowPlatformListByContentName";
+		
+		/**
 		 * 是否开启SSO授权
 		 */
 		public static const DISABLE_SSO:String = "disableSSO";		

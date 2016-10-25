@@ -212,14 +212,31 @@ package
 			getFriendListBtn.addEventListener(MouseEvent.CLICK, onGetFriendListHandler);
 			
 			var shareWithContentNameBtn:Button = new Button();
-			shareWithContentNameBtn.label = "通过配置文件文件(暂时仅支持iOS)";
+			shareWithContentNameBtn.label = "根据配置文件分享(iOS-Only)";
 			shareWithContentNameBtn.x = 100;
 			shareWithContentNameBtn.y = getFriendListBtn.y + getFriendListBtn.height + 10;
 			shareWithContentNameBtn.width = BUTTON_WIDTH + 600;
 			shareWithContentNameBtn.height = BUTTON_HEIGHT;
 			this.addChild(shareWithContentNameBtn);
 			shareWithContentNameBtn.addEventListener(MouseEvent.CLICK, onShareWithContentNameHandler);
-				
+			
+			var showShareMenuWithContentNameBtn:Button = new Button();
+			showShareMenuWithContentNameBtn.label = "根据配置文件展示菜单(iOS-Only)";
+			showShareMenuWithContentNameBtn.x = 100;
+			showShareMenuWithContentNameBtn.y = shareWithContentNameBtn.y + shareWithContentNameBtn.height + 10;
+			showShareMenuWithContentNameBtn.width = BUTTON_WIDTH + 600;
+			showShareMenuWithContentNameBtn.height = BUTTON_HEIGHT;
+			this.addChild(showShareMenuWithContentNameBtn);
+			showShareMenuWithContentNameBtn.addEventListener(MouseEvent.CLICK, onShowShareMenuWithContentNameHandler);
+			
+			var showShareViewWithContentNameBtn:Button = new Button();
+			showShareViewWithContentNameBtn.label = "根据配置文件展示编辑界面(iOS-Only)";
+			showShareViewWithContentNameBtn.x = 100;
+			showShareViewWithContentNameBtn.y = showShareMenuWithContentNameBtn.y + showShareMenuWithContentNameBtn.height + 10;
+			showShareViewWithContentNameBtn.width = BUTTON_WIDTH + 600;
+			showShareViewWithContentNameBtn.height = BUTTON_HEIGHT;
+			this.addChild(showShareViewWithContentNameBtn);
+			showShareViewWithContentNameBtn.addEventListener(MouseEvent.CLICK, onShowShareContentEditorWithContentNameHandler);
 		}
 		
 		public function onComplete(reqId:int, platform:int, action:String, res:Object):void
@@ -323,14 +340,28 @@ package
 		
 		private function onShareWithContentNameHandler(event:MouseEvent):int
 		{
-			//ShareContent.xml 中 <Content> 节点的 name 属性
-			var contentName:String = "mob";
+			//ShareSDKCfigFile.bundle 中的 ShareContent.xml 中 <Content> 节点的 name 属性
+			var contentName:String = "ShareSDK";
 			//自定义字替换字段对象
 			var customFields:Object = new Object(); 							
 			//例如这里定义 imgUrl 的内容为一个网络图片，那么对应在 ShareContent.xml中所有 "{imgUrl}"（大括号及其内容）都会被替换为该网络图片
-			customFields["imgUrl"] = "http://ww1.sinaimg.cn/mw690/d2ed1fc2tw1e701mhwjncj20cs092754.jpg";
+			customFields["imgUrl"] = "http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg";
 			//新增功能接口，支持根据ShareContent.xml文件进行分享(目前仅支持 iOS 平台)
 			return shareSDK.shareWithContentName(PlatformID.SinaWeibo, contentName, customFields);
+		}
+		
+		private function onShowShareMenuWithContentNameHandler(event:MouseEvent):int
+		{
+			//使用方法参考同shareSDK.shareWithContentName
+			//新增功能接口，支持根据hareSDKCfigFile.bundle 中的 ShareContent.xml文件进行分享(目前仅支持 iOS 平台)
+			return shareSDK.showPlatformListByContentName("ShareSDK", null, null, 320, 460);
+		}
+		
+		private function onShowShareContentEditorWithContentNameHandler(event:MouseEvent):int
+		{
+			//使用方法参考同shareSDK.shareWithContentName
+			//新增功能接口，支持根据hareSDKCfigFile.bundle 中的 ShareContent.xml文件进行分享(目前仅支持 iOS 平台)
+			return shareSDK.showShareContentEditorByContentName(PlatformID.SinaWeibo, "ShareSDK", null);
 		}
 		
 		private function onGetAuthInfoHandler(event:MouseEvent):void
