@@ -422,6 +422,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 			map.put("userGender", plat.getDb().getUserGender());
 			map.put("userID", plat.getDb().getUserId());
 			map.put("openID", plat.getDb().get("openid"));
+			map.put("unionID", plat.getDb().get("unionid"));
 			map.put("userName", plat.getDb().getUserName());
 			map.put("userIcon", plat.getDb().getUserIcon());
 		}						
