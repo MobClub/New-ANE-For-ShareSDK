@@ -6,10 +6,11 @@ set ane=ShareSDK_Android.ane
 set target=ane %ane% .\extension_build_android_only.xml
 set swc=.\ShareSDKExtension.swc
 set platform-android=-platform Android-ARM -C ./Android-ARM .
+set platform-default=-platform default -C ./default .
 
 echo Packaging...
 if exist %ane% del %ane% > nul
-%adt% -package -target %target% -swc %swc% %platform-ios-arm% %platform-ios-x86% %platform-android%
+%adt% -package -target %target% -swc %swc% %platform-default% %platform-ios-arm% %platform-ios-x86% %platform-android%
 
 cls
 echo Finish!
