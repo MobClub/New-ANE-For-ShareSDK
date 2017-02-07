@@ -38,7 +38,7 @@ import cn.sharesdk.onekeyshare.themes.classic.port.FriendListPagePort;
 
 import com.mob.tools.gui.AsyncImageView;
 import com.mob.tools.utils.DeviceHelper;
-import com.mob.tools.utils.R;
+import com.mob.tools.utils.ResHelper;
 
 public class EditPage extends OnekeySharePage implements OnClickListener, TextWatcher, Runnable {
 	private OnekeyShareThemeImpl impl;
@@ -106,7 +106,7 @@ public class EditPage extends OnekeySharePage implements OnClickListener, TextWa
 
 	/** 执行分享时的方法 */
 	private void shareAndFinish() {
-		int resId = R.getStringRes(activity, "ssdk_oks_sharing");
+		int resId = ResHelper.getStringRes(activity, "ssdk_oks_sharing");
 		if (resId > 0) {
 			Toast.makeText(activity, resId, Toast.LENGTH_SHORT).show();
 		}
@@ -212,7 +212,7 @@ public class EditPage extends OnekeySharePage implements OnClickListener, TextWa
 	/** 动态适配编辑界面的高度 */
 	public void run() {
 		int height = svContent.getChildAt(0).getHeight();
-		RelativeLayout.LayoutParams lp = R.forceCast(svContent.getLayoutParams());
+		RelativeLayout.LayoutParams lp = ResHelper.forceCast(svContent.getLayoutParams());
 		if (height > maxBodyHeight && lp.height != maxBodyHeight) {
 			lp.height = maxBodyHeight;
 			svContent.setLayoutParams(lp);

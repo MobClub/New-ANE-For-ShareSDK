@@ -5,7 +5,7 @@ This is the new version and new sample of ShareSDK for ANE.
 supported original ShareSDK version:
 
 - iOS - v3.5.0 
-- Android - V2.7.1
+- Android - V2.8.0
 
 
 - 如需中文文档,[请看这里](http://wiki.mob.com/sharesdk-ios-for-ane/)
