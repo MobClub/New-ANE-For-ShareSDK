@@ -43,11 +43,15 @@
         <packagedDependency>ShareSDK/Support/PlatformConnector/WechatConnector.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/PlatformConnector/WhatsAppConnector.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/PlatformConnector/YiXinConnector.framework</packagedDependency>
-         
+        <packagedDependency>ShareSDK/Support/PlatformConnector/DingTalkConnector.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformConnector/MeiPaiConnector.framework</packagedDependency>
         <!-- 第三方平台framwork的路径,不需要的可以删除-->
         <packagedDependency>ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenAPI.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/PlatformSDK/FacebookMessengerSDK/FBSDKMessengerShareKit.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformSDK/FacebookMessengerSDK/FBSDKCoreKit.framework</packagedDependency>
         <packagedDependency>ShareSDK/Support/PlatformSDK/RenRenSDK/RennSDK.framework</packagedDependency>
-         
+        <packagedDependency>ShareSDK/Support/PlatformSDK/DingTalkSDK/DTShareKit.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformSDK/MPShareSDK/MPShareSDK.framework</packagedDependency>
+        <packagedDependency>ShareSDK/Support/PlatformSDK/LineSDK/LineSDK.framework</packagedDependency>
     </packagedDependencies>
 </platform>

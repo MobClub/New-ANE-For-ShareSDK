@@ -30,6 +30,8 @@
 #define __SHARESDK_RENREN__
 #define __SHARESDK_YIXIN__
 #define __SHARESDK_FACEBOOK_MSG__
+#define __SHARESDK_DINGTALK__
+//#define __SHARESDK_MEIPAI__
 
 //#define __SHARESDK_KAKAO__             //目前发现Kakao SDK 不能顺利在ANE环境下编译
 
@@ -64,6 +66,14 @@
 
 #ifdef __SHARESDK_FACEBOOK_MSG__
 #import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
+#endif
+
+#ifdef __SHARESDK_DINGTALK__
+#import <DTShareKit/DTOpenAPI.h>
+#endif
+
+#ifdef __SHARESDK_MEIPAI__
+#import <MPShareSDK/MPShareSDK.h>
 #endif
 
 static UIView *_refView = nil;
@@ -2347,15 +2357,52 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             {
                 type = convertContentTypeWith([customDict objectForKey:@"shareType"]);
             }
-
+            
             [params SSDKSetupAliPaySocialParamsByText:text
                                                 image:image
                                                 title:title
                                                   url:[NSURL URLWithString:url]
-                                                 type:type];
-            
+                                                 type:type platformType:SSDKPlatformTypeAliPaySocial];
         }
         
+        if ([customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocialTimeline]])
+        {
+            NSString *text = nil;
+            NSString *image = nil;
+            NSString *title = nil;
+            NSString *url = nil;
+            SSDKContentType type = SSDKContentTypeText;
+            NSDictionary *customDict = [customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocialTimeline]];
+            
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            {
+                text = [customDict objectForKey:@"text"];
+            }
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            {
+                title = [customDict objectForKey:@"title"];
+            }
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            {
+                url = [customDict objectForKey:@"url"];
+            }
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            {
+                image = [customDict objectForKey:@"imageUrl"];
+            }
+            if ([[customDict objectForKey:@"shareType"] isKindOfClass:[NSNumber class]])
+            {
+                type = convertContentTypeWith([customDict objectForKey:@"shareType"]);
+            }
+            
+            [params SSDKSetupAliPaySocialParamsByText:text
+                                                image:image
+                                                title:title
+                                                  url:[NSURL URLWithString:url]
+                                                 type:type platformType:SSDKPlatformTypeAliPaySocialTimeline];
+
+        }
+
         if ([customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformSubTypeKakaoTalk]])
         {
             NSDictionary *kakaoDict = [customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformSubTypeKakaoTalk]];
@@ -2551,6 +2598,66 @@ NSMutableDictionary *converPublicContent (NSDictionary *contentDict)
             
         }
 
+        //钉钉
+        if ([customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeDingTalk]])
+        {
+            NSString *text = nil;
+            NSString *image = nil;
+            NSString *title = nil;
+            NSString *url = nil;
+            SSDKContentType type = SSDKContentTypeText;
+            
+            NSDictionary *customDict = [customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeDingTalk]];
+            
+            if ([[customDict objectForKey:@"text"] isKindOfClass:[NSString class]])
+            {
+                text = [customDict objectForKey:@"text"];
+            }
+            if ([[customDict objectForKey:@"imageUrl"] isKindOfClass:[NSString class]])
+            {
+                image = [customDict objectForKey:@"imageUrl"];
+            }
+            if ([[customDict objectForKey:@"title"] isKindOfClass:[NSString class]])
+            {
+                title = [customDict objectForKey:@"title"];
+            }
+            if ([[customDict objectForKey:@"url"] isKindOfClass:[NSString class]])
+            {
+                url = [customDict objectForKey:@"url"];
+            }
+            if ([[customDict objectForKey:@"shareType"] isKindOfClass:[NSNumber class]])
+            {
+                type = convertContentTypeWith([customDict objectForKey:@"shareType"]);
+            }
+            
+            [params SSDKSetupDingTalkParamsByText:text
+                                            image:image
+                                            title:title
+                                              url:[NSURL URLWithString:url]
+                                             type:type];
+
+        }
+        
+        //美拍
+        if ([customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeMeiPai]])
+        {
+            NSString *videoPath = nil;
+            SSDKContentType type = SSDKContentTypeVideo;
+            NSDictionary *customDict = [customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeMeiPai]];
+            
+            if ([[customDict objectForKey:@"videoPath"] isKindOfClass:[NSString class]])
+            {
+                videoPath = [customDict objectForKey:@"videoPath"];
+            }
+            if ([[customDict objectForKey:@"shareType"] isKindOfClass:[NSNumber class]])
+            {
+                type = convertContentTypeWith([customDict objectForKey:@"shareType"]);
+            }
+            
+            [params SSDKSetupMeiPaiParamsByUrl:[NSURL URLWithString:videoPath]
+                                          type:type];
+        }
+        
         //evernote
         if ([customizeShareParams objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeEvernote]])
         {
@@ -2724,6 +2831,17 @@ void ShareSDKRegisterAppAndSetPlatformConfig (NSDictionary *params)
                              [ShareSDKConnector connectFacebookMessenger:[FBSDKMessengerSharer class]];
 #endif
                              break;
+                             
+                         case SSDKPlatformTypeDingTalk:
+#ifdef __SHARESDK_DINGTALK__
+                             [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
+#endif
+                             break;
+                         case SSDKPlatformTypeMeiPai:
+#ifdef __SHARESDK_MEIPAI__
+                             [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
+#endif
+                             break;
                          default:
                              break;
                      }
@@ -2819,6 +2937,22 @@ void ShareSDKRegisterAppAndSetPlatformConfig (NSDictionary *params)
                         *stop = YES;
                     }
                 }];
+                break;
+            }
+            case SSDKPlatformTypeAliPaySocial:
+            {
+                NSDictionary *platformDict = nil;
+                NSDictionary *dictFromAliPaySocial = [platformConfig objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocial]];
+                NSDictionary *dictFromAliPaySocialTimeline = [platformConfig objectForKey:[NSString stringWithFormat:@"%lu",(unsigned long)SSDKPlatformTypeAliPaySocialTimeline]];
+                if (dictFromAliPaySocial)
+                {
+                    platformDict = dictFromAliPaySocial;
+                }
+                else
+                {
+                    platformDict = dictFromAliPaySocialTimeline;
+                }
+                [appInfo addEntriesFromDictionary:platformDict];
                 break;
             }
             default:

@@ -49,12 +49,6 @@
         <dep id="AS3" type="n" /> 
         <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
       </script>
-      <script name="_8c6690377cf46b8eaaa513da390d7e796951563cb0777b1e4b79f5593b03c727_flash_display_Sprite" mod="1477380204367" signatureChecksum="3094706505" >
-        <def id="_8c6690377cf46b8eaaa513da390d7e796951563cb0777b1e4b79f5593b03c727_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-      </script>
       <script name="cn/sharesdk/ane/events/AddFriendEvent" mod="1477033714000" signatureChecksum="3743514718" >
         <def id="cn.sharesdk.ane.events:AddFriendEvent" /> 
         <dep id="AS3" type="n" /> 
@@ -131,7 +125,7 @@
         <dep id="AS3" type="n" /> 
         <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
       </script>
-      <script name="cn/sharesdk/ane/PlatformID" mod="1477033714000" signatureChecksum="1908672528" >
+      <script name="cn/sharesdk/ane/PlatformID" mod="1491444717000" signatureChecksum="2588685193" >
         <def id="cn.sharesdk.ane:PlatformID" /> 
         <dep id="AS3" type="n" /> 
         <dep id="Object" type="i" /> 
@@ -169,6 +163,12 @@
         <dep id="flash.system:Capabilities" type="e" /> 
         <dep id="AS3" type="n" /> 
         <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
+      </script>
+      <script name="_2b4abacb0047956eb35d72b871864383e35df4d1afde83dfd66dbd6f0d78236b_flash_display_Sprite" mod="1491448905496" signatureChecksum="1386970045" >
+        <def id="_2b4abacb0047956eb35d72b871864383e35df4d1afde83dfd66dbd6f0d78236b_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
       </script>
       <script name="cn/sharesdk/ane/platform/Pinterest" mod="1477033714000" signatureChecksum="669790375" >
         <def id="cn.sharesdk.ane.platform:Pinterest" /> 
@@ -328,7 +328,7 @@
         <dep id="cn.sharesdk.ane.platform:DevInfo" type="i" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="459d8b16a6f32d1caeaf2207cf67a67b18dd9c0f1dad4b5b767f995507fc5354"   />
+        <digest type="SHA-256" signed="false" value="a55ecc8b7ce1b326a63bab6c3d32cd70dd3906d26c7cf14ead96a0e2b458516a"   />
       </digests>
     </library>
   </libraries>

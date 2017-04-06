@@ -42,6 +42,10 @@ package cn.sharesdk.ane {
 		public static const FacebookMessenger:int = 46;	//FacebookMessenger
 		public static const Bluetooth:int = 48;			//Bluetooth 
 		public static const AliPay:int = 50;		    //AliPay Social 
+		public static const AlipayMoments:int = 51;		    //AliPay Moments
+		public static const Dingding:int = 52;		    //DingTalk 钉钉
+		public static const Youtube:int = 53;		    //youtube
+		public static const MeiPai:int = 54;		    //美拍
 		
 		public static const YixinSeries:int = 994;      		//Yixin series    *（iOS only, including Yixin,YinxinMonents,YinxinFavorites）*
 		public static const KakaoSeries:int = 995;      		//Kakao series    *（iOS only, including KakaoTalk,KakaoStory）*
