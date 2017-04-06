@@ -72,6 +72,8 @@
 				<string>1</string>
 				<string>2</string>
 			</array>
+			<key>NSPhotoLibraryUsageDescription</key>
+				<string>从手机相册中选择</string>
 			<key>CFBundleURLTypes</key>
 			<array>
 				<dict>
