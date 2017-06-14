@@ -19,6 +19,7 @@ import com.adobe.fre.FREContext;
 import com.adobe.fre.FREExtension;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
+import com.mob.MobSDK;
 import com.mob.tools.utils.Hashon;
 import com.mob.tools.utils.UIHandler;
 
@@ -121,7 +122,10 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		try {
 			String appkey = (String) params.get("appKey");
 			boolean enableStatistics = !"false".equals(params.get("enableStatistics"));
-			ShareSDK.initSDK(getActivity(), appkey, enableStatistics);		
+			MobSDK.init(getActivity(), appkey);
+			if(!enableStatistics){
+			  ShareSDK.disableStatistics();
+			}
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -160,7 +164,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		int reqID = (Integer) params.get("reqID");
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		platform.setPlatformActionListener(new AnePlatformActionListener(this, reqID));
 		platform.SSOSetting(disableSSO);
 		platform.authorize();
@@ -174,7 +178,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	private String removeAccount(HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		platform.removeAccount(true);
 		return null;
 	}
@@ -186,7 +190,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	private String isAuthorized(HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("isAuthValid", platform.isAuthValid());
 		return hashon.fromHashMap(map);
@@ -195,7 +199,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	public String isClientValid(HashMap<String, Object> params) {
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("isAuthValid", platform.isClientValid());
 		return hashon.fromHashMap(map);
@@ -210,7 +214,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		int reqID = (Integer) params.get("reqID");
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		platform.setPlatformActionListener(new AnePlatformActionListener(this, reqID));
 		platform.SSOSetting(disableSSO);
 		platform.showUser(null);
@@ -226,7 +230,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		int reqID = (Integer) params.get("reqID");
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		AnePlatformActionListener paListener = new AnePlatformActionListener(this, reqID);
 		platform.setPlatformActionListener(paListener);
 		HashMap<String, Object> shareParams = (HashMap<String, Object>) params.get("shareParams");
@@ -272,7 +276,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		ShareParams sp = new ShareParams(shareParams);
 		for (Integer platformId : platforms) {
 			String platformName = ShareSDK.platformIdToName(platformId.intValue());
-			Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+			Platform platform = ShareSDK.getPlatform(platformName);
 			platform.setPlatformActionListener(new AnePlatformActionListener(this, reqID));
 			platform.SSOSetting(disableSSO);
 			platform.share(sp);
@@ -382,7 +386,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		int reqID = (Integer) params.get("reqID");
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		platform.setPlatformActionListener(new AnePlatformActionListener(this, reqID));
 		platform.SSOSetting(disableSSO);
 		platform.listFriend((Integer) params.get("count"), (Integer) params.get("page"), (String) params.get("account"));
@@ -397,7 +401,7 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 		int reqID = (Integer) params.get("reqID");
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform platform = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform platform = ShareSDK.getPlatform(platformName);
 		platform.setPlatformActionListener(new AnePlatformActionListener(this, reqID));
 		platform.SSOSetting(disableSSO);
 		platform.followFriend((String) params.get("account"));
@@ -412,9 +416,9 @@ public class ShareSDKUtils extends FREContext implements FREExtension, FREFuncti
 	private String getAuthInfo(HashMap<String, Object> params){
 		int platformId = (Integer) params.get("platform");
 		String platformName = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(getActivity(), platformName);
+		Platform plat = ShareSDK.getPlatform(platformName);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		if(plat.isValid()){
+		if(plat.isClientValid()){
 			map.put("expiresIn", plat.getDb().getExpiresIn());
 			map.put("expiresTime", plat.getDb().getExpiresTime());
 			map.put("token", plat.getDb().getToken());

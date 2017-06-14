@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<application xmlns="http://ns.adobe.com/air/application/25.0">
+
+	<id>ANEDemo.debug.debug</id>
+
+	<filename>ANEDemo</filename>
+
+	<name>ANEDemo-debug-debug</name>
+	
+	<versionNumber>0.0.0</versionNumber>
+	
+	<initialWindow>
+		<content>ANEDemo.swf</content>
+
+	<autoOrients>true</autoOrients>
+        <fullScreen>true</fullScreen>
+        <visible>true</visible>
+    </initialWindow>
+
+	<android>
+        <manifestAdditions><![CDATA[
+			<manifest android:installLocation="auto">
+			    <uses-permission android:name="android.permission.GET_TASKS" />
+			    <uses-permission android:name="android.permission.INTERNET" />
+			    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+			    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+			    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+			    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+			    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+			    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+			    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+			    
+			    <application android:enabled="true">
+			    	<activity
+			            android:name="com.mob.tools.MobUIShell"
+			            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			            android:configChanges="keyboardHidden|orientation|screenSize"
+			            android:windowSoftInputMode="stateHidden|adjustResize"
+			            android:multiprocess="true">      
+			            <intent-filter android:priority="1000">
+			                <data android:scheme="tencent100371282" />
+			                <action android:name="android.intent.action.VIEW" />
+			                <category android:name="android.intent.category.DEFAULT" />
+			                <category android:name="android.intent.category.BROWSABLE" />
+			            </intent-filter>
+			            
+			            <intent-filter>
+							<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+							<category android:name="android.intent.category.DEFAULT" />
+						</intent-filter>			
+			        </activity>
+			            
+			        <activity
+			            android:name=".wxapi.WXEntryActivity"
+			            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			            android:exported="true" />
+			            
+			        <activity
+			            android:name=".yxapi.YXEntryActivity"
+			            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			            android:excludeFromRecents="true"
+			            android:exported="true"
+			            android:launchMode="singleTop" />
+			    </application>
+			</manifest>
+		]]></manifestAdditions>
+    </android>
+    <iPhone>
+        <InfoAdditions><![CDATA[
+			<key>UIDeviceFamily</key>
+			<array>
+				<string>1</string>
+				<string>2</string>
+			</array>
+			<key>NSPhotoLibraryUsageDescription</key>
+				<string>从手机相册中选择</string>
+			<key>CFBundleURLTypes</key>
+			<array>
+				<dict>
+					<key>CFBundleTypeRole</key>
+					<string>Editor</string>
+					<key>CFBundleURLName</key>
+					<string></string>
+					<key>CFBundleURLSchemes</key>
+					<array>
+						<string>wb568898243</string>
+						<string>wx4868b35061f87885</string>
+						<string>QQ05FB8B52</string>
+						<string>tencent100371282</string>
+						<string>pocketapp1234</string>			
+						<string>rm226427cn.appgo.sharebyone</string>
+						<string>pin1432928</string>
+						<string>yx0d9a9f9088ea44d78680f3274da1765f</string>
+					</array>
+				</dict>
+			</array>
+			<key>LSApplicationQueriesSchemes</key>
+			<array>
+			<string>sinaweibohd</string>
+			<string>sinaweibo</string>
+			<string>vkauthorize</string>
+			<string>fb-messenger</string>
+			<string>yixinfav</string>
+			<string>yixinoauth</string>
+			<string>yixinopenapi</string>
+			<string>yixin</string>
+			<string>pinit</string>
+			<string>kakaolink</string>
+			<string>kakao48d3f524e4a636b08d81b3ceb50f1003</string>
+			<string>alipay</string>
+			<string>storykompassauth</string>
+			<string>pinterestsdk.v1</string>
+			<string>kakaokompassauth</string>
+			<string>alipayshare</string>
+			<string>pinit</string>
+			<string>line</string>
+			<string>whatsapp</string>
+			<string>mqqwpa</string>
+			<string>instagram</string>
+			<string>fbauth2</string>
+			<string>renren</string>
+			<string>renrenios</string>
+			<string>renrenapi</string>
+			<string>rm226427com.mob.demoShareSDK</string>
+			<string>mqq</string>
+			<string>mqqopensdkapiV2</string>
+			<string>mqqopensdkapiV3</string>
+			<string>wtloginmqq2</string>
+			<string>mqqapi</string>
+			<string>mqqOpensdkSSoLogin</string>
+			<string>sinaweibohdsso</string>
+			<string>sinaweibosso</string>
+			<string>wechat</string>
+			<string>weixin</string>
+			</array>
+			<key>NSAppTransportSecurity</key>
+			<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+			</dict>
+			<key>MOBAppKey</key>
+			<string>iosv1101</string>
+			<key>MOBAppSecret</key>
+			<string></string>
+			
+		]]></InfoAdditions>
+        <requestedDisplayResolution>high</requestedDisplayResolution>
+    </iPhone>
+    
+	<extensions>
+        <extensionID>cn.sharesdk.ane.ShareSDKExtension</extensionID>
+    </extensions>
+</application>

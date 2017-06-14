@@ -8,21 +8,22 @@
 
 package cn.sharesdk.onekeyshare;
 
-import static com.mob.tools.utils.BitmapHelper.captureView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.mob.MobSDK;
+import com.mob.tools.utils.BitmapHelper;
+import com.mob.tools.utils.ResHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-
-import com.mob.tools.utils.ResHelper;
 
 /**
 * 快捷分享的入口
@@ -68,14 +69,16 @@ public class OnekeyShare {
 
 	/** imagePath是本地的图片路径，除Linked-In外的所有平台都支持这个字段 */
 	public void setImagePath(String imagePath) {
-		if(!TextUtils.isEmpty(imagePath))
+		if(!TextUtils.isEmpty(imagePath)) {
 			params.put("imagePath", imagePath);
+		}
 	}
 
 	/** imageUrl是图片的网络路径，新浪微博、人人网、QQ空间和Linked-In支持此字段 */
 	public void setImageUrl(String imageUrl) {
-		if (!TextUtils.isEmpty(imageUrl))
+		if (!TextUtils.isEmpty(imageUrl)) {
 			params.put("imageUrl", imageUrl);
+		}
 	}
 
 	/** url在微信（包括好友、朋友圈收藏）和易信（包括好友和朋友圈）中使用，否则可以不提供 */
@@ -204,7 +207,7 @@ public class OnekeyShare {
 	/** 设置一个将被截图分享的View , surfaceView是截不了图片的*/
 	public void setViewToShare(View viewToShare) {
 		try {
-			Bitmap bm = captureView(viewToShare, viewToShare.getWidth(), viewToShare.getHeight());
+			Bitmap bm = BitmapHelper.captureView(viewToShare, viewToShare.getWidth(), viewToShare.getHeight());
 			params.put("viewToShare", bm);
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -231,7 +234,7 @@ public class OnekeyShare {
 		HashMap<String, Object> shareParamsMap = new HashMap<String, Object>();
 		shareParamsMap.putAll(params);
 
-		ShareSDK.initSDK(context.getApplicationContext());
+		MobSDK.init(context.getApplicationContext());
 
 		// 打开分享菜单的统计
 		ShareSDK.logDemoEvent(1, null);

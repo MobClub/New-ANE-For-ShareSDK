@@ -71,7 +71,7 @@ public abstract class PlatformPageAdapter extends ViewPagerAdapter implements On
 	}
 
 	public int getCount() {
-		return cells == null? 0: cells.length;
+		return cells == null ? 0 : cells.length;
 	}
 
 	public void setIndicator(IndicatorView view) {
@@ -164,6 +164,8 @@ public abstract class PlatformPageAdapter extends ViewPagerAdapter implements On
 			} else {
 				ivLogo.setVisibility(View.VISIBLE);
 				tvName.setVisibility(View.VISIBLE);
+				ivLogo.requestLayout();
+				tvName.requestLayout();
 				llCells[i].setBackgroundResource(cellBack);
 				llCells[i].setOnClickListener(this);
 				llCells[i].setTag(logos[i]);

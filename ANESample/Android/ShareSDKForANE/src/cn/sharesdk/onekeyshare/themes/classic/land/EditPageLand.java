@@ -209,14 +209,14 @@ public class EditPageLand extends EditPage implements OnClickListener, TextWatch
 
 		View v = new View(activity);
 		v.setBackgroundColor(0xffcccccc);
-		int px_1 = ratio > 1 ? ((int) ratio) : 1;
-		lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, px_1);
+		int px1 = ratio > 1 ? ((int) ratio) : 1;
+		lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, px1);
 		llBottom.addView(v, lp);
 	}
 
 	private void initShadow(LinearLayout llShadow, float ratio) {
-		int px_1 = ratio > 1 ? ((int) ratio) : 1;
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, px_1);
+		int px1 = ratio > 1 ? ((int) ratio) : 1;
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, px1);
 
 		View v = new View(activity);
 		v.setBackgroundColor(0x29000000);

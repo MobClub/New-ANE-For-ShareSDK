@@ -30,7 +30,7 @@
 #define __SHARESDK_RENREN__
 #define __SHARESDK_YIXIN__
 #define __SHARESDK_FACEBOOK_MSG__
-#define __SHARESDK_DINGTALK__
+//#define __SHARESDK_DINGTALK__
 //#define __SHARESDK_MEIPAI__
 
 //#define __SHARESDK_KAKAO__             //目前发现Kakao SDK 不能顺利在ANE环境下编译
@@ -2777,8 +2777,7 @@ void ShareSDKRegisterAppAndSetPlatformConfig (NSDictionary *params)
         platforms = [NSMutableArray arrayWithArray:[platformConfig allKeys]];
     }
 
-    [ShareSDK registerApp:appKey
-          activePlatforms:platforms
+    [ShareSDK registerActivePlatforms:platforms
                  onImport:^(SSDKPlatformType platformType) {
                      switch (platformType)
                      {
