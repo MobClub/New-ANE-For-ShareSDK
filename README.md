@@ -4,8 +4,8 @@ This is the new version and new sample of ShareSDK for ANE.
 
 supported original ShareSDK version:
 
-- iOS - v3.5.0 
-- Android - V2.8.0
+- iOS - v4.0.0
+- Android - V3.0.0
 
 
 - 如需中文文档,[请看这里](http://wiki.mob.com/sharesdk-ios-for-ane/)
@@ -28,7 +28,7 @@ And then choose "ActionScription Building(ActionScript构建打包)" -> "Apple i
 
 #####3.Copy ShareSDK.bundle,ShareSDKUI.bundle and other resource
 
-Download the [ShareSDK v3.x](https://github.com/MobClub/ShareSDK3.x-for-iOS).Copy ShareSDK.bundle,ShareSDKUI.bundle(from ShareSDK) to your  YourANEProjec/src.
+Download the [ShareSDK ](https://github.com/MobClub/ShareSDK3.x-for-iOS).Copy ShareSDK.bundle,ShareSDKUI.bundle(from ShareSDK) to your  YourANEProjec/src.
 In addition, if your need some platform and it's SDK(such as Sina,you may need to use it's WeiboSDK),you should copy the bundle and .a file(if they exist) to YourANEProject/src .
 
 For example, when you need Sina platform and it's SDK,you should copy libWeiboSDK.a and WeiboSDK.bundle from ShareSDK/support/PlatformSDK/SinaWeiboSDK to YourANEProject/src.
