@@ -4109,7 +4109,7 @@ FREObject ShareSDKCallMethod (FREContext ctx, void* functionData, uint32_t argc,
             {
                 ShareSDKAuthorize (ctx, [paramDict objectForKey:@"params"]);
             }
-            else if ([action isEqualToString:@"isAuthorizedValid"])
+            else if ([action isEqualToString:@"isAuthorized"])
             {
                 return ShareSDKHasAuthroized([paramDict objectForKey:@"params"]);
             }
